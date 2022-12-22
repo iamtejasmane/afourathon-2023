@@ -10,6 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import WidgetsIcon from '@mui/icons-material/Widgets';
+import { useTheme } from '@emotion/react';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -17,6 +18,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const theme = useTheme();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -34,7 +36,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="relative" sx={{color: theme.palette.primary.main, backgroundColor: theme.palette.primary.light, zIndex: "1400"} } elevation={0} >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <WidgetsIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -49,11 +51,10 @@ function ResponsiveAppBar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            Asynchroniser
+            Erply
           </Typography>
 
           <WidgetsIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -69,11 +70,10 @@ function ResponsiveAppBar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            Asynchroniser
+            Erply
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {/* Something come up as page in between */}
