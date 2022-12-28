@@ -1,5 +1,8 @@
 const Sequelize = require("sequelize")
+const colors = require("colors")
+
 const PORT = process.env.PORT || "3306"
+colors.enable()
 
 // import table strcuture from the models
 const projectModel = require("../models/projectModel")
@@ -23,7 +26,7 @@ const sequelize = new Sequelize("afourathon", "root", "password", {
 sequelize
   .authenticate()
   .then(() => {
-    console.log("Connection established successfully")
+    console.log("Connection established successfully".green)
   })
   .catch((error) => {
     console.log("error " + error)
@@ -35,13 +38,15 @@ const Employees = employeeModel(sequelize, Sequelize)
 const Projects = projectModel(sequelize, Sequelize)
 
 // database schema relationships
-Employees.hasMany(Projects, { foreignKey: "emp_id", sourceKey: "project_id" })
+Employees.hasMany(Projects, { foreignKey: "emp_id" })
+Projects.belongsTo(Employees)
 
 // synchronize the connection
 sequelize.sync({ force: false }).then(() => {
-  console.log("Database synced")
+  console.log("Database synced".green)
 })
 
 module.exports = {
   Projects: Projects,
+  Employees: Employees,
 }
