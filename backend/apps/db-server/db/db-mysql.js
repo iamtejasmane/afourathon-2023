@@ -1,6 +1,8 @@
 const Sequelize = require("sequelize")
-
 const PORT = process.env.PORT || '3306'
+
+// import table strcuture from the models
+const projectModel = require("../../daily-status-app/project-micro-app/models/projectModel")
 
 // a new instance of the Sequelize to access the database
 const sequelize = new Sequelize("afourathon", "root", "password", {
@@ -26,7 +28,20 @@ sequelize
     console.log("error " + error)
   })
 
-  // synchronize the connection
-  sequelize.sync({ force: false }).then(() => {
+
+
+// creates an instance of a table
+
+const Projects = projectModel(sequelize, Sequelize) 
+
+// database schema relationships
+
+
+// synchronize the connection
+sequelize.sync({ force: false }).then(() => {
     console.log("Database synced")
   })
+
+module.exports = {
+    Projects: Projects
+  }
