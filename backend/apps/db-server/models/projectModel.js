@@ -11,5 +11,5 @@ module.exports = (sequlize, type) => {
     project_end_dt: type.DATE,
     project_manager_name: type.STRING,
     project_manager_email: type.STRING,
-  });
-};
+  })
+}
