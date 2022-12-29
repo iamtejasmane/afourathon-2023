@@ -3,6 +3,7 @@ const cors = require("cors")
 const morgan = require("morgan")
 
 const routerEmployee = require("./routes/employee")
+const routerAdmin = require("./routes/admin")
 
 const app = express()
 
@@ -11,6 +12,7 @@ app.use(cors("*"))
 app.use(morgan("combined"))
 
 app.use(routerEmployee)
+app.use(routerAdmin)
 
 // backlog: pass port as env variable
 app.listen(8004, () => {
