@@ -65,21 +65,31 @@ router.get("/admin/:id", (req, res) => {
 // id: admin emp_id & is_admin checks.
 // emp_id: ID of the employee to be updated.
 router.put("/admin/:id", (req, res) => {
+  const { id } = req.params
   const { role, designation, emp_id } = req.body
 
-  Employees.findByPk(emp_id)
-    .then((employee) => {
-      employee.update({
-        role: role,
-        designation: designation,
+  Employees.findByPk(id).then((employee) => {
+    if (employee.is_admin == true) {
+      Employees.findByPk(emp_id)
+        .then((employee) => {
+          employee.update({
+            role: role,
+            designation: designation,
+          })
+        })
+        .then((employee) => {
+          res.send(utils.createResult(null, employee))
+        })
+        .catch((err) => {
+          res.send(utils.createResult(err, null))
+        })
+    } else {
+      res.status(404).json({
+        status: "error",
+        error: "You don't have permissions",
       })
-    })
-    .then((employee) => {
-      res.send(utils.createResult(null, employee))
-    })
-    .catch((err) => {
-      res.send(utils.createResult(err, null))
-    })
+    }
+  })
 })
 
 // delete an employee record

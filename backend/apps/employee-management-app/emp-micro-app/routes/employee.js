@@ -32,6 +32,7 @@ const router = express.Router()
 //     })
 //   }
 // })
+
 // get employee details api
 router.get("/employees/:id", (req, res) => {
   const emp_id = req.params.id
