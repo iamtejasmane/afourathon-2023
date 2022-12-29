@@ -96,18 +96,28 @@ router.put("/admin/:id", (req, res) => {
 // id: admin's employee id for checks.
 // emp_id: employee id to be deleted
 router.delete("/admin/:id", (req, res) => {
+  const { id } = req.params
   const { emp_id } = req.body
 
-  Employees.findByPk(emp_id)
-    .then((employee) => {
-      employee.destory()
-    })
-    .then((employee) => {
-      res.send(utils.createResult(null, employee))
-    })
-    .catch((error) => {
-      res.send(utils.createResult(error, null))
-    })
+  Employees.findByPk(id).then((employee) => {
+    if (employee.is_admin == true) {
+      Employees.findByPk(emp_id)
+        .then((employee) => {
+          employee.destory()
+        })
+        .then((employee) => {
+          res.send(utils.createResult(null, employee))
+        })
+        .catch((error) => {
+          res.send(utils.createResult(error, null))
+        })
+    } else {
+      res.status(404).json({
+        status: "error",
+        error: "You don't have permissions",
+      })
+    }
+  })
 })
 
 module.exports = router
