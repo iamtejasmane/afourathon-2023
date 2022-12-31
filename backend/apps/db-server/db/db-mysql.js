@@ -7,6 +7,8 @@ colors.enable()
 // import table strcuture from the models
 const projectModel = require("../models/projectModel")
 const employeeModel = require("../models/employeeModel")
+const dailyStatusEmailListModel = require("../models/dailyStatusModel")
+const weeklyStatusEmailListModel = require("../models/weeklyStatusModel")
 
 // a new instance of the Sequelize to access the database
 const sequelize = new Sequelize("afourathon", "root", "password", {
@@ -36,10 +38,18 @@ sequelize
 
 const Employees = employeeModel(sequelize, Sequelize)
 const Projects = projectModel(sequelize, Sequelize)
+const DailyStatusEmails = dailyStatusEmailListModel(sequelize, Sequelize)
+const WeeklyStatusEmails = weeklyStatusEmailListModel(sequelize, Sequelize)
 
 // database schema relationships
 Employees.hasMany(Projects, { foreignKey: "emp_id" })
 Projects.belongsTo(Employees)
+
+Projects.hasMany(DailyStatusEmails, { foreignKey: "project_id" })
+DailyStatusEmails.belongsTo(Projects)
+
+Projects.hasMany(WeeklyStatusEmails, { foreignKey: "project_id" })
+WeeklyStatusEmails.belongsTo(Projects)
 
 // synchronize the connection
 sequelize.sync({ force: false }).then(() => {
