@@ -7,8 +7,8 @@ colors.enable()
 // import table strcuture from the models
 const projectModel = require("../models/projectModel")
 const employeeModel = require("../models/employeeModel")
-const dailyStatusEmailListModel = require("../models/dailyStatusModel")
-const weeklyStatusEmailListModel = require("../models/weeklyStatusModel")
+const dailyStatusEmailListModel = require("../models/dailyStatusEmailListModel")
+const weeklyStatusEmailListModel = require("../models/weeklyStatusEmailListModel")
 
 // a new instance of the Sequelize to access the database
 const sequelize = new Sequelize("afourathon", "root", "password", {
