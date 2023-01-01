@@ -5,7 +5,7 @@ import ProjectList from './ProjectList'
 
 const Project = () => {
   return (
-    <div style={{overflowX: "hidden"}}>
+    <div>
       <AddNewProject/>
       <ProjectList/>
     </div>

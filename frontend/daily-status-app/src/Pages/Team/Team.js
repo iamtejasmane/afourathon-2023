@@ -1,8 +1,11 @@
 import React from 'react'
+import AddNewTeam from './AddNewTeam';
 
 const Team = () => {
   return (
-    <div>Team</div>
+    <div>
+      <AddNewTeam/>
+    </div>
   )
 }
 

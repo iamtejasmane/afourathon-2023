@@ -15,6 +15,7 @@ a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
 }
-.react-datepicker-popper {
-  z-index: 1700 !important;
+
+.MuiPickersPopper-root{
+  z-index: 1900 !important;
 }
