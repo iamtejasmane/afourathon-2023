@@ -89,3 +89,36 @@ router.post("/teams/:id", async (req, res) => {
     })
   }
 })
+
+// update team information api
+// id: team id to be updated
+router.put("/team/:id", (req, res) => {
+  const team_id = req.params.id
+
+  Teams.findByPk(team_id)
+    .then(async (team) => {
+      await team.update(req.body)
+    })
+    .then((team) => {
+      res.send(utils.createResult(null, team))
+    })
+    .catch((err) => {
+      res.send(utils.createResult(err, null))
+    })
+})
+
+// delete team by id
+router.delete("/teams/:id", (req, res) => {
+  const team_id = req.params.id
+
+  Projects.findByPk(team_id)
+    .then(async (team) => {
+      await team.destroy()
+    })
+    .then((team) => {
+      res.send(utils.createResult(null, team))
+    })
+    .catch((err) => {
+      res.send(utils.createResult(err, null))
+    })
+})
