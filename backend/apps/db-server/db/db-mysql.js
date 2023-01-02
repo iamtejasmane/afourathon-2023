@@ -5,8 +5,11 @@ const PORT = process.env.PORT || "3306"
 colors.enable()
 
 // import table strcuture from the models
-const projectModel = require("../models/projectModel")
 const employeeModel = require("../models/employeeModel")
+const projectModel = require("../models/projectModel")
+const teamModel = require("../models/teamsModel")
+const dailyStatusEmailListModel = require("../models/dailyStatusEmailListModel")
+const weeklyStatusEmailListModel = require("../models/weeklyStatusEmailListModel")
 
 // a new instance of the Sequelize to access the database
 const sequelize = new Sequelize("afourathon", "root", "password", {
@@ -36,10 +39,15 @@ sequelize
 
 const Employees = employeeModel(sequelize, Sequelize)
 const Projects = projectModel(sequelize, Sequelize)
+const Teams = teamModel(sequelize, Sequelize)
+const DailyStatusEmails = dailyStatusEmailListModel(sequelize, Sequelize)
+const WeeklyStatusEmails = weeklyStatusEmailListModel(sequelize, Sequelize)
 
 // database schema relationships
 Employees.hasMany(Projects, { foreignKey: "emp_id" })
-Projects.belongsTo(Employees)
+Projects.hasMany(Teams, { foreignKey: "project_id" })
+Projects.hasMany(DailyStatusEmails, { foreignKey: "project_id" })
+Projects.hasMany(WeeklyStatusEmails, { foreignKey: "project_id" })
 
 // synchronize the connection
 sequelize.sync({ force: false }).then(() => {
@@ -49,4 +57,7 @@ sequelize.sync({ force: false }).then(() => {
 module.exports = {
   Projects: Projects,
   Employees: Employees,
+  DailyStatusEmails: DailyStatusEmails,
+  WeeklyStatusEmails: WeeklyStatusEmails,
+  Teams: Teams,
 }
