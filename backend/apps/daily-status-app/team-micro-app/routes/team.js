@@ -1,7 +1,7 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const { Teams, Projects, Employees } = require("../../../db-server/db/db-mysql")
+const { Teams, Employees } = require("../../../db-server/db/db-mysql")
 
 const router = express.Router()
 
@@ -111,7 +111,7 @@ router.put("/team/:id", (req, res) => {
 router.delete("/teams/:id", (req, res) => {
   const team_id = req.params.id
 
-  Projects.findByPk(team_id)
+  Teams.findByPk(team_id)
     .then(async (team) => {
       await team.destroy()
     })
@@ -122,3 +122,5 @@ router.delete("/teams/:id", (req, res) => {
       res.send(utils.createResult(err, null))
     })
 })
+
+module.exports = router
