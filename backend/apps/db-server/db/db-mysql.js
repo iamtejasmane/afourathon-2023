@@ -59,4 +59,5 @@ module.exports = {
   Employees: Employees,
   DailyStatusEmails: DailyStatusEmails,
   WeeklyStatusEmails: WeeklyStatusEmails,
+  Teams: Teams,
 }
