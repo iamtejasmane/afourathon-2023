@@ -53,7 +53,7 @@ const rows = [
 const ProjectList = () => {
   return (
     <div >
-      <Box sx={{ height: 634, maxWidth: "80%", padding: "50px"}}>
+      <Box sx={{ height: "50vh", maxWidth: "80%", padding: "50px"}}>
       <DataGrid
         rows={rows}
         columns={columns}

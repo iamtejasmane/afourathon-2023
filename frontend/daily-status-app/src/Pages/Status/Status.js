@@ -1,8 +1,11 @@
 import React from 'react'
+import AddStatus from './AddStatus'
 
 const Status = () => {
   return (
-    <div>Status</div>
+    <div>
+      <AddStatus/>
+    </div>
   )
 }
 
