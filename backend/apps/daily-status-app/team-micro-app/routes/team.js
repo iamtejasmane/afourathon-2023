@@ -1,25 +1,16 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const { Teams, Projects, Employees } = require("../../../db-server/db/db-mysql")
+const { Teams, Employees } = require("../../../db-server/db/db-mysql")
 
 const router = express.Router()
 
-// This api is for admin users to get all the teams in the database
-// router.get("/teams", (req, res) => {
-//   Teams.findAll()
-//     .then((teams) => {
-//       res.send(utils.createResult(null, teams))
-//     })
-//     .catch((err) => {
-//       res.send(utils.createResult(err, null))
-//     })
-// })
-
 // get all the temas created by employee
-router.get("/temas/:id", async (req, res) => {
+// id: the id of the employee
+// use project_id as query parameter e.g. http://localhost:8012/teams/10?project_id=1
+router.get("/teams/:id", async (req, res) => {
   const emp_id = req.params.id
-  const { project_id } = req.body
+  const project_id = req.query.project_id
 
   let employee = await Employees.findByPk(emp_id)
 
@@ -57,11 +48,12 @@ router.post("/teams/:id", async (req, res) => {
     team_end_dt,
     team_lead_name,
     team_lead_email,
+    team_members_emp_id_list,
   } = req.body
 
   // get employee
   const employee = await Employees.findByPk(emp_id)
-
+  let err = {}
   // check if the employee the employee has required permissions and role.
   // if (employee["designation"] == "Project Manager" && role > 4) { // for role based access
   if (
@@ -76,10 +68,43 @@ router.post("/teams/:id", async (req, res) => {
       team_lead_name: team_lead_name,
       team_lead_email: team_lead_email,
     })
-      .then((teams) => {
-        res.send(utils.createResult(null, teams))
+      .then(async (team) => {
+        console.log(team)
+        // console.log(team_members_emp_id_list.length)
+        // get emp
+        for (i = 0; i < team_members_emp_id_list.length; i++) {
+          const employee_id = team_members_emp_id_list[i]
+          const employee = await Employees.findByPk(employee_id)
+
+          console.log(i + "".red)
+          console.log(employee)
+
+          if (employee["team_id"] == null) {
+            console.log("here in if ".red)
+            await employee.update({ team_id: team["team_id"] })
+          } else {
+            err = {
+              status: "error",
+              error: "Employee is already allocated to team",
+              data: [],
+            }
+            err.data.push(employee)
+
+            // res.status(400).json({
+            //   status: "error",
+            //   error: "Employee is already allocated to team",
+            //   data: employee,
+            // })
+          }
+        }
+        if (err["status"] == "error") {
+          res.send(utils.createResult(err, null))
+        } else {
+          res.send(utils.createResult(null, team))
+        }
       })
       .catch((err) => {
+        console.log("error :".red + err)
         res.send(utils.createResult(err, null))
       })
   } else {
@@ -111,9 +136,9 @@ router.put("/team/:id", (req, res) => {
 router.delete("/teams/:id", (req, res) => {
   const team_id = req.params.id
 
-  Projects.findByPk(team_id)
-    .then(async (team) => {
-      await team.destroy()
+  Teams.findByPk(team_id)
+    .then((team) => {
+      team.destroy()
     })
     .then((team) => {
       res.send(utils.createResult(null, team))
@@ -122,3 +147,16 @@ router.delete("/teams/:id", (req, res) => {
       res.send(utils.createResult(err, null))
     })
 })
+
+// This api is for admin users to get all the teams in the database
+// router.get("/teams", (req, res) => {
+//   Teams.findAll()
+//     .then((teams) => {
+//       res.send(utils.createResult(null, teams))
+//     })
+//     .catch((err) => {
+//       res.send(utils.createResult(err, null))
+//     })
+// })
+
+module.exports = router
