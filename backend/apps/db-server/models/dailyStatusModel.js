@@ -6,6 +6,7 @@ module.exports = (sequlize, type) => {
       autoIncrement: true,
     },
     emp_id: type.INTEGER,
+    date: type.DATE,
     ticket_id: type.STRING,
     hours_spent: type.INTEGER,
     status: type.STRING,
