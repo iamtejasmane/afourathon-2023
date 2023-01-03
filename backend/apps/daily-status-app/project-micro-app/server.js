@@ -12,6 +12,6 @@ app.use(morgan("combined"))
 
 app.use(routerProject)
 
-app.listen(8000, () => {
+app.listen(8080, () => {
   console.log("project server is listening on port: ".green + "8000".blue)
 })
