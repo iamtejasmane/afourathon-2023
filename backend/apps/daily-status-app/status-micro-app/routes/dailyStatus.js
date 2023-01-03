@@ -4,6 +4,8 @@ const utils = require("../utils/utils")
 const { DailyStatus, Employees } = require("../../../db-server/db/db-mysql")
 const router = express.Router()
 
+// this api gets the list of daily status of a specific employee
+// id: employee id
 router.get("/daily-status/:id", async (req, res) => {
   const emp_id = req.params.id
 
@@ -16,15 +18,19 @@ router.get("/daily-status/:id", async (req, res) => {
     })
 })
 
+// add employee status
+// id: employee id
 router.post("/daily-status/:id", async (req, res) => {
   const emp_id = req.params.id
   const { ticket_id, hours_spent, status, comments } = req.body
-  const date = new Date().toLocaleDateString()
+
+  // add date to status
+  const date = new Date()
 
   DailyStatus.create({
     emp_id: emp_id,
-    date: date,
     ticket_id: ticket_id,
+    date: date,
     hours_spent: hours_spent,
     status: status,
     comments: comments,
@@ -39,10 +45,12 @@ router.post("/daily-status/:id", async (req, res) => {
 
 router.put("/daily-status/:id", async (req, res) => {
   const status_id = req.params.id
+  const date = new Date().toLocaleDateString()
 
   DailyStatus.findByPk(status_id)
     .then(async (status) => {
       await status.update(req.body)
+      await status.update({ date: date })
     })
     .then((status) => {
       res.send(utils.createResult(null, status))
@@ -56,7 +64,7 @@ router.put("/daily-status/:id", async (req, res) => {
 router.delete("/daily-status/:id", (req, res) => {
   const status_id = req.params.id
 
-  Projects.findByPk(status_id)
+  DailyStatus.findByPk(status_id)
     .then(async (status) => {
       await status.destroy()
     })
