@@ -19,7 +19,7 @@ router.get("/employees/:id", (req, res) => {
 
 // get all employess in a team
 // id: team id
-router.get("/employee-team/id", (req, res) => {
+router.get("/employee-team/:id", (req, res) => {
   const team_id = req.params.id
 
   Employees.findAll({ where: { team_id: team_id } })
