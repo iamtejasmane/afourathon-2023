@@ -4,7 +4,7 @@
   "description": "Daily status-report mailing microservice application",
   "main": "email-server.js",
   "scripts": {
-    "start": "npm email-server.js"
+    "start": "node email-server.js"
   },
   "author": "Tejas Mane",
   "license": "ISC",

@@ -2,6 +2,7 @@ import { Button, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import React, { useState } from "react";
 import AddProjectForm from "../../Components/AddProjectForm";
+import {createNewProject} from '../../slice/projectSlice'
 
 const AddNewProject = () => {
   const [open, setOpen] = useState(false)

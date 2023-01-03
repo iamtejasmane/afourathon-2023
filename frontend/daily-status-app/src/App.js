@@ -6,7 +6,9 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Project from "./Pages/Project";
 import Team from "./Pages/Team";
 import Status from "./Pages/Status";
-import { Box } from "@mui/material";
+import { useEffect } from "react";
+
+import {getAllProject} from './slice/projectSlice'
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,7 @@ const router = createBrowserRouter([
   },
 ]);
 
+
 function Main() {
   return (
     <Grid2 container>
@@ -36,11 +39,13 @@ function Main() {
         <Sidebar />
       </Grid2>
       <Grid2 xs={10}>
-          <Outlet />
+        <Outlet />
       </Grid2>
     </Grid2>
   );
 }
+
+
 
 function App() {
   return (
