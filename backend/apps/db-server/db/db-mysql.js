@@ -10,6 +10,8 @@ const projectModel = require("../models/projectModel")
 const teamModel = require("../models/teamsModel")
 const dailyStatusEmailListModel = require("../models/dailyStatusEmailListModel")
 const weeklyStatusEmailListModel = require("../models/weeklyStatusEmailListModel")
+const dailyStatus = require("../models/dailyStatusModel")
+const weeklyStatus = require("../models/weeklyStatusModel")
 
 // a new instance of the Sequelize to access the database
 const sequelize = new Sequelize("afourathon", "root", "password", {
@@ -42,12 +44,15 @@ const Projects = projectModel(sequelize, Sequelize)
 const Teams = teamModel(sequelize, Sequelize)
 const DailyStatusEmails = dailyStatusEmailListModel(sequelize, Sequelize)
 const WeeklyStatusEmails = weeklyStatusEmailListModel(sequelize, Sequelize)
+const DailyStatus = dailyStatus(sequelize, Sequelize)
 
 // database schema relationships
 Employees.hasMany(Projects, { foreignKey: "emp_id" })
 Projects.hasMany(Teams, { foreignKey: "project_id" })
 Projects.hasMany(DailyStatusEmails, { foreignKey: "project_id" })
 Projects.hasMany(WeeklyStatusEmails, { foreignKey: "project_id" })
+// Teams.hasMany(Employees, { foreignKey: "team_id" })
+Employees.hasMany(DailyStatus, { foreignKey: "emp_id" })
 
 // synchronize the connection
 sequelize.sync({ force: false }).then(() => {
@@ -60,4 +65,5 @@ module.exports = {
   DailyStatusEmails: DailyStatusEmails,
   WeeklyStatusEmails: WeeklyStatusEmails,
   Teams: Teams,
+  DailyStatus: DailyStatus,
 }
