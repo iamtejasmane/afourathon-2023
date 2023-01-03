@@ -32,7 +32,7 @@ router.get("/teams/:id", async (req, res) => {
   } else {
     res.status(404).json({
       status: "error",
-      error: "Permission denied!",
+      message: "Permission denied!",
     })
   }
 })
@@ -110,7 +110,7 @@ router.post("/teams/:id", async (req, res) => {
   } else {
     res.status(404).json({
       status: "error",
-      error: "Permission denied!",
+      message: "Permission denied!",
     })
   }
 })
@@ -133,9 +133,20 @@ router.put("/team/:id", (req, res) => {
 })
 
 // delete team by id
-router.delete("/teams/:id", (req, res) => {
+// to delete a team it required to unbind the employee object first.
+router.delete("/teams/:id", async (req, res) => {
   const team_id = req.params.id
 
+  // unbinding employees
+  const employees = await Employees.update(
+    { team_id: null },
+    { where: { team_id: team_id } }
+  )
+
+  if (!employees) {
+    console.log("not found emp".yellow)
+  }
+  // delete team
   Teams.findByPk(team_id)
     .then((team) => {
       team.destroy()
@@ -146,6 +157,12 @@ router.delete("/teams/:id", (req, res) => {
     .catch((err) => {
       res.send(utils.createResult(err, null))
     })
+  // } else {
+  //   res.status(400).json({
+  //     status: "error",
+  //     message: "Erorr fetching employee!",
+  //   })
+  // }
 })
 
 // This api is for admin users to get all the teams in the database
