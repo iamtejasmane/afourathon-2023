@@ -13,5 +13,5 @@ app.use(morgan("combined"))
 app.use(routerStatus)
 
 app.listen(8016, () => {
-  console.log("status server listening on port: " + "8016")
+  console.log("status server listening on port: ".green + "8016".blue)
 })
