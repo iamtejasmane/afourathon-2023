@@ -1,11 +1,7 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const {
-  Projects,
-  Employees,
-  DailyStatusEmails,
-} = require("../../../db-server/db/db-mysql")
+const { DailyStatusEmails } = require("../../../db-server/db/db-mysql")
 
 const router = express.Router()
 
@@ -44,11 +40,12 @@ router.put("/daily-status-emails/:id", async (req, res) => {
 })
 
 router.delete("/daily-status-emails/:id", (req, res) => {
-  const { id } = req.params
+  const id = req.params.id
   DailyStatusEmails.findByPk(id)
     .then(async (email) => {
       console.log(email)
-      await email.destory({ force: true })
+      email.project_id = null
+      await email.destory()
     })
     .then((email) => {
       res.send(utils.createResult(null, email))
