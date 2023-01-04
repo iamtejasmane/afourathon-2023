@@ -38,7 +38,7 @@ function Main() {
       <Grid2 xs={2}>
         <Sidebar />
       </Grid2>
-      <Grid2 xs={10}>
+      <Grid2 xs={10} sx={{marginTop: "75px"}}>
         <Outlet />
       </Grid2>
     </Grid2>

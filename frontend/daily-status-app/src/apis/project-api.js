@@ -38,10 +38,10 @@ export const updateProjectApi = async (body) => {
     project_end_dt,
     project_manager_name,
     project_manager_email,
-    projectId,
+    project_id,
   } = body;
   try {
-    const { data } = await axios.put(projectBaseUrl + "projects/" + projectId, {
+    const { data } = await axios.put(projectBaseUrl + "projects/" + project_id, {
       ...body,
     });
     return data;

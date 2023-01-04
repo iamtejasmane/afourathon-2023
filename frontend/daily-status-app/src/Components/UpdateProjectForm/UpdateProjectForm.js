@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import { Button, FormControl, TextField } from "@mui/material";
@@ -7,8 +7,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box } from "@mui/system";
 import Select from "react-select";
-import { createNewProject, getAllProject } from "../../slice/projectSlice";
-import { useDispatch } from "react-redux";
+import {
+  createNewProject,
+  getAllProject,
+  projectAction,
+  updateProject,
+} from "../../slice/projectSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const options = [
   { value: "admin@admin.com", label: "admin@admin.com", empId: "10" },
@@ -16,7 +21,7 @@ const options = [
   { value: "cto@admin.com", label: "CTO@admin.com", empId: "6" },
 ];
 
-const intialState = {
+const initialState = {
   project_name: "",
   project_start_dt: Date.parse(new Date()),
   project_end_dt: Date.parse(new Date()),
@@ -63,6 +68,12 @@ const formReducer = (state, action) => {
         project_mailing_list: action.payload.map((item) => item.value),
       };
     }
+    case "SET_NEW_STATE": {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    }
 
     default: {
       return { ...state };
@@ -70,22 +81,35 @@ const formReducer = (state, action) => {
   }
 };
 
-const AddProjectForm = ({ open, setOpen }) => {
+const UpdateProjectForm = () => {
   const reduxDispatch = useDispatch();
+  const { selectedProject, updateProjectModal } = useSelector(
+    (store) => store.project
+  );
 
-  const [state, dispatch] = useReducer(formReducer, intialState);
+  const [state, dispatch] = useReducer(formReducer, initialState);
 
+  useEffect(() => {
+    dispatch({ type: "SET_NEW_STATE", payload: { ...selectedProject } });
+    return () =>
+      dispatch({ type: "SET_NEW_STATE", payload: { ...initialState } });
+  }, [selectedProject]);
+
+  const handleClose = () => {
+    reduxDispatch(projectAction.closeUpdateProjectModal());
+    reduxDispatch(projectAction.unsetProject());
+  };
   const handleClick = async () => {
-    await reduxDispatch(createNewProject({ ...state, empId: 10 }));
+    await reduxDispatch(updateProject({ ...state, empId: 10 }));
     await reduxDispatch(getAllProject({ empId: 10 }));
-    setOpen(false);
+    handleClose();
   };
 
   return (
     <Dialog
       fullScreen={false}
-      onClose={() => setOpen(false)}
-      open={open}
+      onClose={handleClose}
+      open={updateProjectModal}
       sx={{ zIndex: "1800", position: "absolute" }}
     >
       <DialogTitle>Add New Project</DialogTitle>
@@ -164,7 +188,7 @@ const AddProjectForm = ({ open, setOpen }) => {
             variant="contained"
             onClick={handleClick}
           >
-            Create{" "}
+            Update{" "}
           </Button>
         </FormControl>
       </Box>
@@ -172,4 +196,4 @@ const AddProjectForm = ({ open, setOpen }) => {
   );
 };
 
-export default React.memo(AddProjectForm);
+export default React.memo(UpdateProjectForm);

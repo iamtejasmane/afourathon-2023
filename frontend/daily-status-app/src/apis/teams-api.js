@@ -6,7 +6,7 @@ const teamsBaseUrl = process.env.REACT_APP_KEY_TEAMS_SERVER;
 export const getTeamsApi = async (body) => {
   const { empId, projectId } = body;
   try {
-    const { data } = await axios.get(teamsBaseUrl + "team/" + empId + "?" +"project_id=" +projectId)
+    const { data } = await axios.get(teamsBaseUrl + "teams/" + empId + "?" +"project_id=" +projectId)
     return data;
   } catch (err) {
     console.log(err);
@@ -18,7 +18,7 @@ export const createTeamsApi = async (body) => {
     empId,
   } = body;
   try {
-    const { data } = await axios.post(teamsBaseUrl + "team/" + empId, {
+    const { data } = await axios.post(teamsBaseUrl + "teams/" + empId, {
       ...body,
     });
     return data;
@@ -33,7 +33,7 @@ export const updateTeamsApi = async (body) => {
     teamId,
   } = body;
   try {
-    const { data } = await axios.put(teamsBaseUrl + "team/" + teamId, {
+    const { data } = await axios.put(teamsBaseUrl + "teams/" + teamId, {
       ...body,
     });
     return data;
@@ -42,11 +42,11 @@ export const updateTeamsApi = async (body) => {
   }
 };
 
-export const deleteProjectApi = async (body) => {
+export const deleteTeamsApi = async (body) => {
   const { teamId } = body;
   try {
     const { data } = await axios.delete(
-      teamsBaseUrl + "team/" + teamId
+      teamsBaseUrl + "teams/" + teamId
     );
     return data;
   } catch (err) {
