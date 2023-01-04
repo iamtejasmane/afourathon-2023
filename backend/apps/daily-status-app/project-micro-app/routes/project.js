@@ -1,7 +1,11 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const { Projects, Employees } = require("../../../db-server/db/db-mysql")
+const {
+  Projects,
+  Employees,
+  DailyStatusEmails,
+} = require("../../../db-server/db/db-mysql")
 
 const router = express.Router()
 
@@ -50,6 +54,7 @@ router.post("/projects/:id", async (req, res) => {
     project_end_dt,
     project_manager_name,
     project_manager_email,
+    project_mailing_list,
   } = req.body
 
   const employee = await Employees.findByPk(emp_id)
@@ -65,8 +70,23 @@ router.post("/projects/:id", async (req, res) => {
       project_manager_name: project_manager_name,
       project_manager_email: project_manager_email,
     })
-      .then((projects) => {
-        res.send(utils.createResult(null, projects))
+      .then(async (projects) => {
+        let emailStatus
+        for (i = 0; i < project_mailing_list.length; i++) {
+          emailStatus = await DailyStatusEmails.create({
+            project_id: projects.project_id,
+            email: project_mailing_list[i],
+          })
+        }
+        if (!emailStatus) {
+          res.status(400).json({
+            status: "error",
+            message: "invalid email updated",
+            data: emailStatus,
+          })
+        } else {
+          res.send(utils.createResult(null, projects))
+        }
       })
       .catch((err) => {
         res.send(utils.createResult(err, null))
@@ -78,6 +98,9 @@ router.post("/projects/:id", async (req, res) => {
     })
   }
 })
+
+// get all the emails associated with a project
+// id: project id
 
 // update project information api
 // id: project id to be updated
