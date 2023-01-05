@@ -53,7 +53,7 @@ Projects.hasMany(Teams, { foreignKey: "project_id" })
 Projects.hasMany(DailyStatusEmails, { foreignKey: "project_id" })
 Projects.hasMany(WeeklyStatusEmails, { foreignKey: "project_id" })
 Employees.hasMany(DailyStatus, { foreignKey: "emp_id" })
-Projects.hasMane(WeeklyStatus, { foreignKey: "project_id" })
+Projects.hasMany(WeeklyStatus, { foreignKey: "project_id" })
 // synchronize the connection
 sequelize.sync({ force: false }).then(() => {
   console.log("Database synced".green)
