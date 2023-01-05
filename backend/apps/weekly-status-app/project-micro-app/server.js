@@ -11,10 +11,9 @@ app.use(express.json())
 app.use(cors("*"))
 app.use(morgan("combined"))
 
-// Uncomment the project router line if project app of the daily status app
-// is running on the different server
-
-// app.use(routerProject)
+// Comment the project router line if project app of the daily status app
+// is running on the same port number
+app.use(routerProject)
 app.use(routerWeeklyStatusEMails)
 
 app.listen(8020, () => {
