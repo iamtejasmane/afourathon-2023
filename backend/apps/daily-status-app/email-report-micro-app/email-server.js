@@ -24,8 +24,8 @@ const fromEmail = process.env.EMAILFROM
 // Delivering mail with sendMail method
 
 cron.schedule("* * * * *", async function () {
-  console.log("---------------------")
-  console.log("Running Cron Process")
+  console.log("---------------------".green)
+  console.log("Running Cron Process".green)
 
   // get all teams
   const teams = await Teams.findAll()
@@ -118,17 +118,18 @@ cron.schedule("* * * * *", async function () {
     <td>${employee_details[i].status.ticket_id}</td>
     <td>${employee_details[i].status.status}</td>
     <td>${employee_details[i].status.hours_spent} hours</td>
-    <td>${employee_details[i].status.comments}Streetdog</td>
+    <td>${employee_details[i].status.comments}</td>
   </tr>
 </table>`,
     }
 
+    console.log("mail options:".yellow)
     console.log(mailOptions)
 
     // Delivering mail with sendMail method
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) console.log(error)
-      else console.log("Email sent: " + info.response)
+      else console.log("Email sent: ".green + info.response.green)
     })
   }
 })

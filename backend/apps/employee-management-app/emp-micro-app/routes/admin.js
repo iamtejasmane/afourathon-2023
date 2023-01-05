@@ -4,27 +4,6 @@ const utils = require("../utils/utils")
 const { Employees } = require("../../../db-server/db/db-mysql")
 const router = express.Router()
 
-// this is the middleware to check whether
-// the user has admin permission or not
-
-// router.use(function (req, res, next) {
-//   const { id } = req.params
-//   console.log(id)
-//   console.log(req.url)
-//   const employee = Employees.findOne({ where: { emp_id: id } })
-
-//   console.log("heree".red)
-//   console.log(employee.is_admin)
-//   if (employee.is_admin == true) {
-//     next()
-//   } else {
-//     res.status(403).send({
-//       status: "error",
-//       message: "You don't have permissions",
-//     })
-//   }
-// })
-
 // get all the employees
 // router.get("/admin/:id", async (req, res) => {
 //   Employees.findAll()
@@ -36,6 +15,8 @@ const router = express.Router()
 //     })
 // })
 
+// this is the middleware to check whether
+// the user has admin permission or not.
 // get all employees information
 // id : admin's id
 router.get("/admin/:id", (req, res) => {
@@ -43,8 +24,14 @@ router.get("/admin/:id", (req, res) => {
   console.log(id)
 
   Employees.findByPk(id).then((employee) => {
-    console.log(employee)
+    // console.log(JSON.stringify(employee, null, 2))
     if (employee.is_admin == true) {
+      console.log(
+        "Access granted as a admin user to ".green +
+          employee.first_name +
+          "".green
+      )
+
       Employees.findAll()
         .then((employees) => {
           res.send(utils.createResult(null, employees))
@@ -55,7 +42,7 @@ router.get("/admin/:id", (req, res) => {
     } else {
       res.status(404).json({
         status: "error",
-        error: "You don't have permissions",
+        error: "Permissions denied",
       })
     }
   })
@@ -86,7 +73,7 @@ router.put("/admin/:id", (req, res) => {
     } else {
       res.status(404).json({
         status: "error",
-        error: "You don't have permissions",
+        error: "Permissions denied!",
       })
     }
   })
@@ -97,27 +84,18 @@ router.put("/admin/:id", (req, res) => {
 // emp_id: employee id to be deleted
 router.delete("/admin/:id", (req, res) => {
   const { id } = req.params
-  const { emp_id } = req.body
-
-  Employees.findByPk(id).then((employee) => {
-    if (employee.is_admin == true) {
-      Employees.findByPk(emp_id)
-        .then((employee) => {
-          employee.destory()
-        })
-        .then((employee) => {
-          res.send(utils.createResult(null, employee))
-        })
-        .catch((error) => {
-          res.send(utils.createResult(error, null))
-        })
-    } else {
-      res.status(404).json({
-        status: "error",
-        error: "You don't have permissions",
-      })
-    }
-  })
+  // const emp_id = req.query.emp_id
+  Employees.findByPk(id)
+    .then(async (employee) => {
+      console.log(employee)
+      await employee.destory({ force: true })
+    })
+    .then((employee) => {
+      res.send(utils.createResult(null, employee))
+    })
+    .catch((error) => {
+      res.send(utils.createResult(error, null))
+    })
 })
 
 module.exports = router
