@@ -15,7 +15,7 @@ router.get("/teams/:id", async (req, res) => {
   let employee = await Employees.findByPk(emp_id)
 
   // check if the employee has required permissions and role.
-  // if (employee["designation"] == "Project Manager" && role > 4) { // for role based access
+  // if (employee["designation"] == "Project Manager" && employee["role"] > 3) { // for role based access
   // if (employee["designation"] == "Project Manager" || employee["designation"] == "Team Lead") { // for role based access
 
   if (
@@ -37,7 +37,7 @@ router.get("/teams/:id", async (req, res) => {
   }
 })
 
-// create teams api
+// create team within a project
 // id: employee id
 router.post("/teams/:id", async (req, res) => {
   const emp_id = req.params.id
@@ -55,7 +55,7 @@ router.post("/teams/:id", async (req, res) => {
   const employee = await Employees.findByPk(emp_id)
   let err = {}
   // check if the employee the employee has required permissions and role.
-  // if (employee["designation"] == "Project Manager" && role > 4) { // for role based access
+  // if (employee["designation"] == "Project Manager" && employee["role"] > 3) { // for role based access
   if (
     employee["designation"] == "Project Manager" ||
     employee["designation"] == "Team Lead"
@@ -76,11 +76,10 @@ router.post("/teams/:id", async (req, res) => {
           const employee_id = team_members_emp_id_list[i]
           const employee = await Employees.findByPk(employee_id)
 
-          console.log(i + "".red)
-          console.log(employee)
-
           if (employee["team_id"] == null) {
-            console.log("here in if ".red)
+            console.log(
+              `${employee.first_name} is added to team ${team.team_name}`.green
+            )
             await employee.update({ team_id: team["team_id"] })
           } else {
             err = {
@@ -89,12 +88,6 @@ router.post("/teams/:id", async (req, res) => {
               data: [],
             }
             err.data.push(employee)
-
-            // res.status(400).json({
-            //   status: "error",
-            //   error: "Employee is already allocated to team",
-            //   data: employee,
-            // })
           }
         }
         if (err["status"] == "error") {
@@ -117,7 +110,7 @@ router.post("/teams/:id", async (req, res) => {
 
 // update team information api
 // id: team id to be updated
-router.put("/team/:id", (req, res) => {
+router.put("/teams/:id", (req, res) => {
   const team_id = req.params.id
 
   Teams.findByPk(team_id)
@@ -144,7 +137,7 @@ router.delete("/teams/:id", async (req, res) => {
   )
 
   if (!employees) {
-    console.log("not found emp".yellow)
+    console.log("employee not found!".red)
   }
   // delete team
   Teams.findByPk(team_id)
@@ -157,12 +150,6 @@ router.delete("/teams/:id", async (req, res) => {
     .catch((err) => {
       res.send(utils.createResult(err, null))
     })
-  // } else {
-  //   res.status(400).json({
-  //     status: "error",
-  //     message: "Erorr fetching employee!",
-  //   })
-  // }
 })
 
 // This api is for admin users to get all the teams in the database
