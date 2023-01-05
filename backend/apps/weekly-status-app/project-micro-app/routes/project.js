@@ -4,21 +4,10 @@ const utils = require("../utils/utils")
 const {
   Projects,
   Employees,
-  DailyStatusEmails,
+  WeeklyStatusEmails,
 } = require("../../../db-server/db/db-mysql")
 
 const router = express.Router()
-
-// This api is for admin users to get all the projects in the database
-// router.get("/projects", (req, res) => {
-//   Projects.findAll()
-//     .then((projects) => {
-//       res.send(utils.createResult(null, projects))
-//     })
-//     .catch((err) => {
-//       res.send(utils.createResult(err, null))
-//     })
-// })
 
 // get all the projects created by employee
 router.get("/projects/:id", async (req, res) => {
@@ -73,7 +62,7 @@ router.post("/projects/:id", async (req, res) => {
       .then(async (projects) => {
         let emailStatus
         for (i = 0; i < project_mailing_list.length; i++) {
-          emailStatus = await DailyStatusEmails.create({
+          emailStatus = await WeeklyStatusEmails.create({
             project_id: projects.project_id,
             email: project_mailing_list[i],
           })
@@ -134,5 +123,17 @@ router.delete("/projects/:id", (req, res) => {
       res.send(utils.createResult(err, null))
     })
 })
+
+// This api is for admin users to get all the projects in the database
+
+// router.get("/projects", (req, res) => {
+//   Projects.findAll()
+//     .then((projects) => {
+//       res.send(utils.createResult(null, projects))
+//     })
+//     .catch((err) => {
+//       res.send(utils.createResult(err, null))
+//     })
+// })
 
 module.exports = router
