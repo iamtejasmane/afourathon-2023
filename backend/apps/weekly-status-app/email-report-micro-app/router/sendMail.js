@@ -1,5 +1,8 @@
 const express = require("express")
 const utils = require("../utils/utils")
+const transporter = require("../transporter")
+
+require("dotenv").config()
 
 const {
   WeeklyStatusEmails,
@@ -22,7 +25,12 @@ router.get("/send-mail/:id", async (req, res) => {
     project_id: project_id,
   })
   const lastUpdatedStatus = statuses[statuses.length - 1]
-
+  const status = {
+    status: lastUpdatedStatus.status,
+    highligth: lastUpdatedStatus.highligth,
+    risk: lastUpdatedStatus.risk,
+    week_ending_date: lastUpdatedStatus.week_ending_date,
+  }
   // get project to get the project details
   const project = await Projects.findByPk(project_id)
 
@@ -30,21 +38,32 @@ router.get("/send-mail/:id", async (req, res) => {
     where: { project_id: project_id },
   })
 
+  emails = []
+  for (i = 0; i < mailingList.length; i++) {
+    emails.push(mailingList[i].email)
+  }
+
   const subject =
     "Status Report of " +
     project.project_name +
-    " for week ending" +
-    lastUpdatedStatus.week_ending_date
+    " for week ending " +
+    new Date(lastUpdatedStatus.week_ending_date).toLocaleDateString()
 
   // create mail object
   let mailOptions = {
     from: fromEmail,
-    to: mailingList,
+    to: emails,
     subject: subject,
-    text: "Daily Updates:",
-    html: "",
+    text: "Status Updates:",
+    html: `<b>Status: ${status.status}<b><br>
+    <b>Highligths: ${status.highligth}<b><br>
+    <b>Risk: ${status.risk}<b><br>
+    <b>Week Ending Date: ${status.week_ending_date}<b><br>
+    `,
   }
 
+  console.log("Mailing object".blue)
+  console.log(mailOptions)
   // Delivering mail with sendMail method
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
