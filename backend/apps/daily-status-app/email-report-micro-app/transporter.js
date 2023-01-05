@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer")
 require("dotenv").config()
 
 // get the user and passwrod from the environment variable
-const user = process.env.USER
+const user = process.env.EMAILFROM
 const pass = process.env.PASSWORD
 
 // Mail transport configuration

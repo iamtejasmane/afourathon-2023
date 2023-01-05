@@ -60,9 +60,12 @@ cron.schedule("* * * * *", async function () {
         where: { emp_id: emps[j].emp_id },
       })
       console.log("emp status".red)
-      console.log(empStatus[empStatus.length - 1])
+      const lastUpdatedStatus = empStatus[empStatus.length - 1]
+      console.log(lastUpdatedStatus)
 
       let emp_details = {}
+
+      let create_status = {}
       emp_details["emp_id"] = emps[j].emp_id
       emp_details["email"] = emps[j].email
       emp_details["team_id"] = teams[i].team_id
@@ -70,11 +73,22 @@ cron.schedule("* * * * *", async function () {
       emp_details["project_name"] = project.project_name
       emp_details["email_list"] = emailList
 
+      if (lastUpdatedStatus) {
+        create_status["ticket_id"] = lastUpdatedStatus.ticket_id
+        create_status["status"] = lastUpdatedStatus.status
+        create_status["hours_spent"] = lastUpdatedStatus.hours_spent
+        create_status["comments"] = lastUpdatedStatus.comments
+
+        emp_details["status"] = create_status
+      } else {
+        emp_details["status"] = create_status
+      }
+
       employee_details.push(emp_details)
     }
   }
 
-  // console.log(employee_details)
+  console.log(employee_details)
 
   // get status from their empid
   for (i = 0; i < employee_details.length; i++) {
@@ -91,17 +105,31 @@ cron.schedule("* * * * *", async function () {
       to: employee_details[i].email,
       cc: employee_details[i].email_list,
       subject: subject,
-      text: "Some content to send",
-      html: "<b>The html content</b>",
+      text: "Daily Updates:",
+      html: `
+<table>
+  <tr>
+    <td>Ticket Id</td>
+    <td>Status</td>
+    <td>Hours Spent</td>
+    <td>Comments</td>
+  </tr>
+  <tr>
+    <td>${employee_details[i].status.ticket_id}</td>
+    <td>${employee_details[i].status.status}</td>
+    <td>${employee_details[i].status.hours_spent} hours</td>
+    <td>${employee_details[i].status.comments}Streetdog</td>
+  </tr>
+</table>`,
     }
 
     console.log(mailOptions)
 
     // Delivering mail with sendMail method
-    // transporter.sendMail(mailOptions, (error, info) => {
-    //   if (error) console.log(error)
-    //   else console.log("Email sent: " + info.response)
-    // })
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) console.log(error)
+      else console.log("Email sent: " + info.response)
+    })
   }
 })
 
