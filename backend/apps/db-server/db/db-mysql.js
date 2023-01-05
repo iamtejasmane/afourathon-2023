@@ -45,15 +45,15 @@ const Teams = teamModel(sequelize, Sequelize)
 const DailyStatusEmails = dailyStatusEmailListModel(sequelize, Sequelize)
 const WeeklyStatusEmails = weeklyStatusEmailListModel(sequelize, Sequelize)
 const DailyStatus = dailyStatus(sequelize, Sequelize)
+const WeeklyStatus = weeklyStatus(sequelize, Sequelize)
 
 // database schema relationships
 Employees.hasMany(Projects, { foreignKey: "emp_id" })
 Projects.hasMany(Teams, { foreignKey: "project_id" })
 Projects.hasMany(DailyStatusEmails, { foreignKey: "project_id" })
 Projects.hasMany(WeeklyStatusEmails, { foreignKey: "project_id" })
-// Teams.hasMany(Employees, { foreignKey: "team_id" })
 Employees.hasMany(DailyStatus, { foreignKey: "emp_id" })
-
+Projects.hasMane(WeeklyStatus, { foreignKey: "project_id" })
 // synchronize the connection
 sequelize.sync({ force: false }).then(() => {
   console.log("Database synced".green)
@@ -66,4 +66,5 @@ module.exports = {
   WeeklyStatusEmails: WeeklyStatusEmails,
   Teams: Teams,
   DailyStatus: DailyStatus,
+  WeeklyStatus: WeeklyStatus,
 }
