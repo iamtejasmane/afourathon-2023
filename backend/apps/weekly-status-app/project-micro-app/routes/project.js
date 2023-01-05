@@ -15,11 +15,12 @@ router.get("/projects/:id", async (req, res) => {
 
   let employee = await Employees.findByPk(emp_id)
   // employee = JSON.stringify(employee, null, 2)
-  console.log(employee)
+
   // check if the employee has required permissions and role.
   // if (employee["designation"] == "Project Manager" && role > 4) { // for role based access
   if (employee["designation"] == "Project Manager") {
-    console.log("here".red)
+    console.log("Access Granted".green + " to ".green + employee.first_name)
+
     Projects.findAll({ where: { emp_id: emp_id } })
       .then((project) => {
         res.send(utils.createResult(null, project))
@@ -51,6 +52,8 @@ router.post("/projects/:id", async (req, res) => {
   // check if the employee the employee has required permissions and role.
   // if (employee["designation"] == "Project Manager" && role > 4) { // for role based access
   if (employee["designation"] == "Project Manager") {
+    console.log("Access Granted".green + " to ".green + employee.first_name)
+
     Projects.create({
       emp_id: emp_id,
       project_name: project_name,
@@ -96,28 +99,30 @@ router.post("/projects/:id", async (req, res) => {
 router.put("/projects/:id", (req, res) => {
   const project_id = req.params.id
 
+  // get project by primary key
+  // and update the project
   Projects.findByPk(project_id)
-    .then(async (employee) => {
-      await employee.update(req.body)
+    .then(async (project) => {
+      await project.update(req.body)
     })
-    .then((employee) => {
-      res.send(utils.createResult(null, employee))
+    .then((project) => {
+      res.send(utils.createResult(null, project))
     })
     .catch((err) => {
       res.send(utils.createResult(err, null))
     })
 })
 
-// delete project by id
+// delete project by project id
 router.delete("/projects/:id", (req, res) => {
   const project_id = req.params.id
 
   Projects.findByPk(project_id)
-    .then(async (employee) => {
-      await employee.destroy()
+    .then(async (project) => {
+      await project.destroy()
     })
-    .then((employee) => {
-      res.send(utils.createResult(null, employee))
+    .then((project) => {
+      res.send(utils.createResult(null, project))
     })
     .catch((err) => {
       res.send(utils.createResult(err, null))
