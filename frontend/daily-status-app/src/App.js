@@ -8,13 +8,18 @@ import Team from "./Pages/Team";
 import Status from "./Pages/Status";
 import { useEffect } from "react";
 
-import {getAllProject} from './slice/projectSlice'
+import { getAllProject } from "./slice/projectSlice";
+import { useDispatch } from "react-redux";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
     children: [
+      {
+        path: "",
+        element: <Project />,
+      },
       {
         path: "project",
         element: <Project />,
@@ -31,21 +36,22 @@ const router = createBrowserRouter([
   },
 ]);
 
-
 function Main() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllProject({ empId: 2 }));
+  }, []);
   return (
     <Grid2 container>
       <Grid2 xs={2}>
         <Sidebar />
       </Grid2>
-      <Grid2 xs={10} sx={{marginTop: "75px"}}>
+      <Grid2 xs={10} sx={{ marginTop: "75px" }}>
         <Outlet />
       </Grid2>
     </Grid2>
   );
 }
-
-
 
 function App() {
   return (

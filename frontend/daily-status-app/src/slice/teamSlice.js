@@ -9,7 +9,8 @@ import {
 const initialState = {
   teamsList: [],
   selectedProjectForTeam: {},
-  updateTeamModal: false,
+  openTeamsModal: false,
+  selectedTeam : {},
 };
 
 export const getTeamsForProject = createAsyncThunk(
@@ -19,23 +20,23 @@ export const getTeamsForProject = createAsyncThunk(
     return response.data;
   }
 );
-// export const createNewProject = createAsyncThunk(
-//   "createNewProject",
-//   async (body) => {
-//     const response = await createProjectApi(body);
-//     return response.data;
-//   }
-// );
+export const createNewTeam = createAsyncThunk(
+  "createNewPTeam",
+  async (body) => {
+    const response = await createTeamsApi(body);
+    return response.data;
+  }
+);
 
-// export const deleteProject = createAsyncThunk("deleteProject", async (body) => {
-//   const response = await deleteProjectApi(body);
-//   return response.data;
-// });
+export const deleteTeam = createAsyncThunk("deleteProject", async (body) => {
+  const response = await deleteTeamsApi(body);
+  return response.data;
+});
 
-// export const updateProject = createAsyncThunk("updateProject", async (body) => {
-//   const response = await updateProprojectListjectApi(body);
-//   return response.data;
-// });
+export const updateTeam = createAsyncThunk("updateTeam", async (body) => {
+  const response = await updateTeamsApi(body);
+  return response.data;
+});
 
 export const teamSlice = createSlice({
   name: "teams",
@@ -47,6 +48,18 @@ export const teamSlice = createSlice({
     unsetselectedProjectForTeam: (state, action) => {
       state.selectedProjectForTeam = {};
     },
+    setTeam: (state, action)=>{
+      state.selectedTeam = action.payload;
+    }, 
+    unSetTeam: (state,)=>{
+      state.selectedTeam = {};
+    },
+    setOpenTeamModal: (state)=>{
+      state.openTeamsModal = true;
+    },
+    setCloseTeamModal: (state)=>{
+      state.openTeamsModal = false;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getTeamsForProject.fulfilled, (state, action) => {

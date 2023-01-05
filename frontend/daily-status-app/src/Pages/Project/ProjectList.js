@@ -18,7 +18,7 @@ const ProjectList = () => {
   }
   async function handleDelete(projectId) {
     await dispatch(deleteProject({ projectId }));
-    await dispatch(getAllProject({ empId: 10 }));
+    await dispatch(getAllProject({ empId: 2 }));
   }
   const columns = [
     { field: "project_id", headerName: "ID", width: 90 },
@@ -90,11 +90,6 @@ const ProjectList = () => {
     }));
     setRows(newRows);
   }, [projectList]);
-
-  useEffect(() => {
-    dispatch(getAllProject({ empId: 10 }));
-  }, []);
-
   return (
     <div>
       <Box sx={{ height: "70vh", maxWidth: "80%", padding: "50px" }}>

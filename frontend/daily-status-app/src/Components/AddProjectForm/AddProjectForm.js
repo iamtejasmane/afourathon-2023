@@ -11,7 +11,7 @@ import { createNewProject, getAllProject } from "../../slice/projectSlice";
 import { useDispatch } from "react-redux";
 
 const options = [
-  { value: "admin@admin.com", label: "admin@admin.com", empId: "10" },
+  { value: "admin@admin.com", label: "admin@admin.com", empId: 2 },
   { value: "manager", label: "manager@admin.com", empId: "7" },
   { value: "cto@admin.com", label: "CTO@admin.com", empId: "6" },
 ];
@@ -76,8 +76,8 @@ const AddProjectForm = ({ open, setOpen }) => {
   const [state, dispatch] = useReducer(formReducer, intialState);
 
   const handleClick = async () => {
-    await reduxDispatch(createNewProject({ ...state, empId: 10 }));
-    await reduxDispatch(getAllProject({ empId: 10 }));
+    await reduxDispatch(createNewProject({ ...state, empId: 2 }));
+    await reduxDispatch(getAllProject({ empId: 2 }));
     setOpen(false);
   };
 

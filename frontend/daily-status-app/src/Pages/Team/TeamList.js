@@ -5,21 +5,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProject } from "../../slice/projectSlice";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { deleteProject, projectAction } from "../../slice/projectSlice";
-import { teamsActions } from "../../slice/teamSlice";
+import { teamsActions , deleteTeam, getTeamsForProject} from "../../slice/teamSlice";
+import { isEmpty } from "lodash";
 
 const TeamList = () => {
   const [rows, setRows] = useState([]);
-  const { teamsList } = useSelector((store) => store.teams);
+  const { teamsList, selectedProjectForTeam } = useSelector((store) => store.teams);
   const dispatch = useDispatch();
 
   function handleEdit(row) {
-    // dispatch(projectAction.openUpdateProjectModal())
-    // dispatch(projectAction.setProject(row))
+    dispatch(teamsActions.setOpenTeamModal())
+    dispatch(teamsActions.setTeam(row))
   }
-  async function handleDelete(projectId) {
-    await dispatch(deleteProject({ projectId }));
-    await dispatch(getAllProject({ empId: 10 }));
+  async function handleDelete(team_id) {
+    await dispatch(deleteTeam({ teamId: team_id   }));
+    await dispatch(getTeamsForProject({ empId: 2 , project_id: selectedProjectForTeam.project_id}));
   }
   const columns = [
     { field: "team_id", headerName: "ID", width: 90 },
@@ -95,21 +95,18 @@ const TeamList = () => {
     return ()=> setRows([]);
   }, [teamsList]);
 
-  useEffect(() => {
-    // dispatch(getAllProject({ empId: 10 }));
-  }, []);
 
   return (
     <div>
       <Box sx={{ height: "50vh", maxWidth: "80%", padding: "50px" }}>
-        <DataGrid
+        {!isEmpty(selectedProjectForTeam) && <DataGrid
           rows={rows}
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[5]}
           disableSelectionOnClick
           experimentalFeatures={{ newEditingApi: true }}
-        />
+        />}
       </Box>
     </div>
   );

@@ -6,9 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import TeamList from "./TeamList";
 import { getTeamsForProject, teamsActions } from "../../slice/teamSlice";
 import isEmpty from "lodash";
+import CreateNewTeamForm from "../../Components/CreateNewTeamForm";
 
 const AddNewTeam = () => {
   const [option, setOptions] = useState([]);
+  const [openCreateNewTeam, setOpenCreateNewTeam] = useState(false);
   const { selectedProjectForTeam } = useSelector((store) => store.teams);
   const { projectList } = useSelector((store) => store.project);
   const dispatch = useDispatch();
@@ -31,11 +33,13 @@ const AddNewTeam = () => {
   }, [projectList]);
 
   function handleProjectSelectChange(value) {
-    dispatch(getTeamsForProject({ empId: 10, project_id: value?.project_id }));
+    dispatch(getTeamsForProject({ empId: 2, project_id: value?.project_id }));
     dispatch(teamsActions.setselectedProjectForTeam(value));
   }
 
-  const handleOpen = () => {};
+  const handleOpen = () => {
+    setOpenCreateNewTeam(true);
+  };
 
   return (
     <div>
@@ -61,11 +65,19 @@ const AddNewTeam = () => {
           options={option}
           placeholder="Select Project"
           onChange={handleProjectSelectChange}
+          defaultValue={{
+            label: selectedProjectForTeam.project_name || "Select Project",
+            value: selectedProjectForTeam.project_id ,
+          }}
         />
       </div>
       <div>
         <TeamList />
       </div>
+      <CreateNewTeamForm
+        open={openCreateNewTeam}
+        setOpen={setOpenCreateNewTeam}
+      />
     </div>
   );
 };
