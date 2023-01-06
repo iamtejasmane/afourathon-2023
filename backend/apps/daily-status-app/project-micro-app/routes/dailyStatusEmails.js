@@ -1,7 +1,7 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const { DailyStatusEmails } = require("../../../db-server/db/db-mysql")
+const { DailyStatusEmails } = require("../db/db-mysql")
 
 const router = express.Router()
 

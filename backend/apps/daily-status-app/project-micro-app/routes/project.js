@@ -1,24 +1,9 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const {
-  Projects,
-  Employees,
-  DailyStatusEmails,
-} = require("../../../db-server/db/db-mysql")
+const { Projects, Employees, DailyStatusEmails } = require("../db/db-mysql")
 
 const router = express.Router()
-
-// This api is for admin users to get all the projects in the database
-// router.get("/projects", (req, res) => {
-//   Projects.findAll()
-//     .then((projects) => {
-//       res.send(utils.createResult(null, projects))
-//     })
-//     .catch((err) => {
-//       res.send(utils.createResult(err, null))
-//     })
-// })
 
 // get all the projects created by employee
 router.get("/projects/:id", async (req, res) => {
@@ -133,5 +118,16 @@ router.delete("/projects/:id", (req, res) => {
       res.send(utils.createResult(err, null))
     })
 })
+
+// This api is for admin users to get all the projects in the database
+// router.get("/projects", (req, res) => {
+//   Projects.findAll()
+//     .then((projects) => {
+//       res.send(utils.createResult(null, projects))
+//     })
+//     .catch((err) => {
+//       res.send(utils.createResult(err, null))
+//     })
+// })
 
 module.exports = router
