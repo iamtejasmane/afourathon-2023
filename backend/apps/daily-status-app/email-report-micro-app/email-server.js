@@ -11,7 +11,7 @@ const {
   Employees,
   Teams,
   Projects,
-} = require("../../db-server/db/db-mysql")
+} = require("./db/db-mysql")
 
 const app = express()
 
@@ -29,7 +29,6 @@ cron.schedule("* * * * *", async function () {
 
   // get all teams
   const teams = await Teams.findAll()
-  console.log(teams[1].team_id)
 
   // get all employees by its team id
   let employee_details = []
@@ -67,6 +66,7 @@ cron.schedule("* * * * *", async function () {
 
       let create_status = {}
       emp_details["emp_id"] = emps[j].emp_id
+      emp_details["first_name"] = emps[j].first_name
       emp_details["email"] = emps[j].email
       emp_details["team_id"] = teams[i].team_id
       emp_details["project_id"] = teams[i].project_id
@@ -123,13 +123,17 @@ cron.schedule("* * * * *", async function () {
 </table>`,
     }
 
-    console.log("mail options:".yellow)
-    console.log(mailOptions)
+    // console.log("mail options:".yellow)
+    // console.log(mailOptions)
 
     // Delivering mail with sendMail method
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) console.log(error)
-      else console.log("Email sent: ".green + info.response.green)
+      else
+        console.log(
+          `Email sent to ${employee_details.first_name}`.green +
+            info.response.green
+        )
     })
   }
 })
