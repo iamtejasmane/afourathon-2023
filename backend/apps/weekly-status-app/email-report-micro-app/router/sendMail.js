@@ -4,11 +4,7 @@ const transporter = require("../transporter")
 
 require("dotenv").config()
 
-const {
-  WeeklyStatusEmails,
-  Projects,
-  WeeklyStatus,
-} = require("../../../db-server/db/db-mysql")
+const { WeeklyStatusEmails, Projects, WeeklyStatus } = require("../db/db-mysql")
 
 const fromEmail = process.env.EMAILFROM
 

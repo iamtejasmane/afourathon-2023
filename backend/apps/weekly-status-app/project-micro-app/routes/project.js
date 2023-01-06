@@ -1,11 +1,7 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const {
-  Projects,
-  Employees,
-  WeeklyStatusEmails,
-} = require("../../../db-server/db/db-mysql")
+const { Projects, Employees, WeeklyStatusEmails } = require("../db/db-mysql")
 
 const router = express.Router()
 

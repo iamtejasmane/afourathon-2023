@@ -4,7 +4,7 @@
   "description": "ERP employee management microservice application",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,9 +12,11 @@
     "axios": "^1.2.1",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
+    "nodemon": "^2.0.20",
     "sequelize": "^6.28.0"
   }
 }

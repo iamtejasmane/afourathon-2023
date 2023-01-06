@@ -1,24 +1,9 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const {
-  Projects,
-  Employees,
-  DailyStatusEmails,
-} = require("../../../db-server/db/db-mysql")
+const { Projects, Employees, DailyStatusEmails } = require("../db/db-mysql")
 
 const router = express.Router()
-
-// This api is for admin users to get all the projects in the database
-// router.get("/projects", (req, res) => {
-//   Projects.findAll()
-//     .then((projects) => {
-//       res.send(utils.createResult(null, projects))
-//     })
-//     .catch((err) => {
-//       res.send(utils.createResult(err, null))
-//     })
-// })
 
 // get all the projects created by employee
 router.get("/projects/:id", async (req, res) => {
@@ -26,11 +11,10 @@ router.get("/projects/:id", async (req, res) => {
 
   let employee = await Employees.findByPk(emp_id)
   // employee = JSON.stringify(employee, null, 2)
-  console.log(employee)
+
   // check if the employee has required permissions and role.
   // if (employee["designation"] == "Project Manager" && role > 4) { // for role based access
   if (employee["designation"] == "Project Manager") {
-    console.log("here".red)
     Projects.findAll({ where: { emp_id: emp_id } })
       .then((project) => {
         res.send(utils.createResult(null, project))
@@ -108,11 +92,11 @@ router.put("/projects/:id", (req, res) => {
   const project_id = req.params.id
 
   Projects.findByPk(project_id)
-    .then(async (employee) => {
-      await employee.update(req.body)
+    .then(async (project) => {
+      await project.update(req.body)
     })
-    .then((employee) => {
-      res.send(utils.createResult(null, employee))
+    .then((project) => {
+      res.send(utils.createResult(null, project))
     })
     .catch((err) => {
       res.send(utils.createResult(err, null))
@@ -124,15 +108,26 @@ router.delete("/projects/:id", (req, res) => {
   const project_id = req.params.id
 
   Projects.findByPk(project_id)
-    .then(async (employee) => {
-      await employee.destroy()
+    .then(async (project) => {
+      await project.destroy()
     })
-    .then((employee) => {
-      res.send(utils.createResult(null, employee))
+    .then((project) => {
+      res.send(utils.createResult(null, project))
     })
     .catch((err) => {
       res.send(utils.createResult(err, null))
     })
 })
+
+// This api is for admin users to get all the projects in the database
+// router.get("/projects", (req, res) => {
+//   Projects.findAll()
+//     .then((projects) => {
+//       res.send(utils.createResult(null, projects))
+//     })
+//     .catch((err) => {
+//       res.send(utils.createResult(err, null))
+//     })
+// })
 
 module.exports = router
