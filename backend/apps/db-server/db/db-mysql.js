@@ -26,8 +26,31 @@ const sequelize = new Sequelize("afourathon", "root", "password", {
   },
 })
 
-// authenticate the database access
-// and establish a connection
+/**
+ * If you have multiple servers that you can connect to then you can
+ * use read replication instance given below
+ */
+
+// const sequelize = new Sequelize('database', null, null, {
+//   dialect: 'mysql',
+//   port: 3306,
+//   replication: {
+//     read: [
+//       { host: '8.8.8.8', username: 'read-1-username', password: process.env.READ_DB_1_PW },
+//       { host: '9.9.9.9', username: 'read-2-username', password: process.env.READ_DB_2_PW }
+//     ],
+//     write: { host: '1.1.1.1', username: 'write-username', password: process.env.WRITE_DB_PW }
+//   },
+//   pool: { // If you want to override the options used for the read/write pool you can do so here
+//     max: 20,
+//     idle: 30000
+//   },
+// })
+
+/**
+ * authenticate the database access and establish a connection
+ */
+
 sequelize
   .authenticate()
   .then(() => {

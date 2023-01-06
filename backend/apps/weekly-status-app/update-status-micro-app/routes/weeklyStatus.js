@@ -1,7 +1,7 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const { WeeklyStatus } = require("../../../db-server/db/db-mysql")
+const { WeeklyStatus } = require("../db/db-mysql")
 const router = express.Router()
 
 // this api gets the list of daily status of a specific project
