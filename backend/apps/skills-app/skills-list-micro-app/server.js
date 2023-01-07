@@ -3,6 +3,7 @@ const cors = require("cors")
 const morgan = require("morgan")
 
 const routerDomain = require("./routes/domain")
+const routerSkill = require("./routes/skill")
 
 const app = express()
 
@@ -11,6 +12,7 @@ app.use(cors("*"))
 app.use(morgan("combined"))
 
 app.use(routerDomain)
+app.use(routerSkill)
 
 // this is a simple health monitoring api
 app.get("/health-check", (req, res) => {
