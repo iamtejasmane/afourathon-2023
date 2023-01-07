@@ -88,4 +88,5 @@ module.exports = {
   Domains: Domains,
   Teams: Teams,
   Skills: Skills,
+  SkillsMappings: SkillsMappings,
 }

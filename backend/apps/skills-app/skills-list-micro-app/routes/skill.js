@@ -5,27 +5,18 @@ const { Employees, Skills } = require("../db/db-mysql")
 
 const router = express.Router()
 
-// get all skills
+// get all skills by domain
+// id: domain id
 router.get("/skills/:id", async (req, res, next) => {
-  const emp_id = req.params.id
-  const domain_id = req.query.domain_id
+  const domain_id = req.params.id
 
-  const employee = await Employees.findByPk(emp_id)
-
-  if (employee["is_admin"] == true) {
-    Skills.findAll({ where: { domain_id: domain_id } })
-      .then((skills) => {
-        res.send(utils.createResult(null, skills))
-      })
-      .catch((err) => {
-        res.send(utils.createResult(err, null))
-      })
-  } else {
-    res.status(401).json({
-      status: "error",
-      message: "Permission denied!",
+  Skills.findAll({ where: { domain_id: domain_id } })
+    .then((skills) => {
+      res.send(utils.createResult(null, skills))
     })
-  }
+    .catch((err) => {
+      res.send(utils.createResult(err, null))
+    })
 })
 // creates skill by admin user
 // id: employee id
