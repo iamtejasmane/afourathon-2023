@@ -14,7 +14,9 @@ const ProjectList = () => {
   const { user } = useUser();
   const dispatch = useDispatch();
 
+  console.log(projectList);
   function handleEditProject(row) {
+    console.log(row);
     dispatch(projectAction.openUpdateProjectModal());
     dispatch(projectAction.setProject(row));
   }

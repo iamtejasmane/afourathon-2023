@@ -54,19 +54,12 @@ const TeamList = () => {
       headerName: "Start Date",
       width: 150,
       editable: false,
-      renderCell: ({ row }) => {
-        return row.team_start_dt.slice(0, 10)
-      }
-      
     },
     {
       field: "team_end_dt",
       headerName: "End Date",
       width: 200,
       editable: false,
-      renderCell: ({ row }) => {
-        return row.team_end_dt.slice(0, 10)
-      }
     },
     {
       field: "team_lead_name",

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import { Button, FormControl, TextField } from "@mui/material";
@@ -6,14 +6,10 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box } from "@mui/system";
-import Select from "react-select";
-import {
-  createNewProject,
-  getAllProject,
-  projectAction,
-  updateProject,
-} from "../../slice/projectSlice";
-import { useDispatch, useSelector } from "react-redux";
+// import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
+import { createNewProject, getAllProject } from "../../slice/projectSlice";
+import { useDispatch } from "react-redux";
 import { useUser } from "../../contexts";
 
 const options = [
@@ -21,8 +17,7 @@ const options = [
   { value: "tejasmane485@gmail.com", label: "tejasmane485@gmail.com" },
 ];
 
-
-const initialState = {
+const intialState = {
   project_name: "",
   project_start_dt: Date.parse(new Date()),
   project_end_dt: Date.parse(new Date()),
@@ -64,12 +59,14 @@ const formReducer = (state, action) => {
       };
     }
     case "SET_MAILING_LIST": {
+      console.log(action.payload);
       return {
         ...state,
         project_mailing_list: action.payload.map((item) => item.value),
       };
     }
-    case "SET_NEW_STATE": {
+
+    case "SET_NEW_DATA": {
       return {
         ...state,
         ...action.payload,
@@ -82,38 +79,24 @@ const formReducer = (state, action) => {
   }
 };
 
-const UpdateProjectForm = () => {
+const AddProjectForm = ({ open, setOpen }) => {
   const reduxDispatch = useDispatch();
-  const { selectedProject, updateProjectModal } = useSelector(
-    (store) => store.project
-  );
 
-  const {user} = useUser();
+  const [state, dispatch] = useReducer(formReducer, intialState);
+  const { user } = useUser();
 
-  const [state, dispatch] = useReducer(formReducer, initialState);
-
-  useEffect(() => {
-    console.log("rendered")
-    dispatch({ type: "SET_NEW_STATE", payload: { ...selectedProject } });
-    return () =>
-      dispatch({ type: "SET_NEW_STATE", payload: { ...initialState } });
-  }, [selectedProject]);
-
-  const handleClose = () => {
-    reduxDispatch(projectAction.closeUpdateProjectModal());
-    reduxDispatch(projectAction.unsetProject());
-  };
   const handleClick = async () => {
-    handleClose();
-    await reduxDispatch(updateProject({ ...state, empId: user.empId}));
-    await reduxDispatch(getAllProject({ empId: user.empId}));
+    setOpen(false);
+    dispatch({ type: "SET_NEW_DATA", payload: intialState });
+    await reduxDispatch(createNewProject({ ...state, empId: user.empId }));
+    await reduxDispatch(getAllProject({ empId: user.empId }));
   };
 
   return (
     <Dialog
       fullScreen={false}
-      onClose={handleClose}
-      open={updateProjectModal}
+      onClose={() => setOpen(false)}
+      open={open}
       sx={{ zIndex: "1800", position: "absolute" }}
     >
       <DialogTitle>Add New Project</DialogTitle>
@@ -177,9 +160,9 @@ const UpdateProjectForm = () => {
               dispatch({ type: "SET_MANAGER_MAIL", payload: e.target.value })
             }
           />
-          <Select
+          <CreatableSelect
             style={{ minWidth: "25ch" }}
-            placeholder="Create  Report Mailing List"
+            placeholder="Create Daily Status Report Mailing List"
             options={options}
             isMulti={true}
             onChange={(e) => {
@@ -192,7 +175,7 @@ const UpdateProjectForm = () => {
             variant="contained"
             onClick={handleClick}
           >
-            Update{" "}
+            Create{" "}
           </Button>
         </FormControl>
       </Box>
@@ -200,4 +183,4 @@ const UpdateProjectForm = () => {
   );
 };
 
-export default React.memo(UpdateProjectForm);
+export default React.memo(AddProjectForm);

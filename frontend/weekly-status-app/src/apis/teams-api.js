@@ -1,7 +1,6 @@
 import axios from "axios";
-require("dotenv").config();
-const teamsBaseUrl = process.env.REACT_APP_KEY_TEAMS_SERVER;
-const exployeBaseUrl = process.env.REACT_APP_KEY_EMPLOYEE_SERVER;
+import env from "react-dotenv";
+const teamsBaseUrl = import.meta.env.VITE_APP_KEY_TEAMS_SERVER;
 
 // http://localhost:8012/teams/empId?project_id=2
 export const getTeamsApi = async (body) => {
@@ -48,16 +47,6 @@ export const deleteTeamsApi = async (body) => {
   const { teamId } = body;
   try {
     const { data } = await axios.delete(teamsBaseUrl + "teams/" + teamId);
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const getExployeeListApi = async (body) => {
-  const { empId } = body;
-  try {
-    const { data } = await axios.get(exployeBaseUrl + "admin/" + empId);
     return data;
   } catch (err) {
     console.log(err);

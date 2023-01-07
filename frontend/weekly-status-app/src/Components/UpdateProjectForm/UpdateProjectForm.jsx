@@ -21,7 +21,6 @@ const options = [
   { value: "tejasmane485@gmail.com", label: "tejasmane485@gmail.com" },
 ];
 
-
 const initialState = {
   project_name: "",
   project_start_dt: Date.parse(new Date()),
@@ -66,7 +65,7 @@ const formReducer = (state, action) => {
     case "SET_MAILING_LIST": {
       return {
         ...state,
-        project_mailing_list: action.payload.map((item) => item.value),
+        project_mailing_list: state.project_mailing_list,
       };
     }
     case "SET_NEW_STATE": {
@@ -88,12 +87,12 @@ const UpdateProjectForm = () => {
     (store) => store.project
   );
 
-  const {user} = useUser();
+  const { user } = useUser();
 
   const [state, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {
-    console.log("rendered")
+    console.log("rendered");
     dispatch({ type: "SET_NEW_STATE", payload: { ...selectedProject } });
     return () =>
       dispatch({ type: "SET_NEW_STATE", payload: { ...initialState } });
@@ -102,11 +101,12 @@ const UpdateProjectForm = () => {
   const handleClose = () => {
     reduxDispatch(projectAction.closeUpdateProjectModal());
     reduxDispatch(projectAction.unsetProject());
+    dispatch({ type: "SET_NEW_STATE", payload: { ...initialState } });
   };
   const handleClick = async () => {
     handleClose();
-    await reduxDispatch(updateProject({ ...state, empId: user.empId}));
-    await reduxDispatch(getAllProject({ empId: user.empId}));
+    await reduxDispatch(updateProject({ ...state, empId: user.empId }));
+    await reduxDispatch(getAllProject({ empId: user.empId }));
   };
 
   return (
@@ -176,15 +176,6 @@ const UpdateProjectForm = () => {
             onChange={(e) =>
               dispatch({ type: "SET_MANAGER_MAIL", payload: e.target.value })
             }
-          />
-          <Select
-            style={{ minWidth: "25ch" }}
-            placeholder="Create  Report Mailing List"
-            options={options}
-            isMulti={true}
-            onChange={(e) => {
-              dispatch({ type: "SET_MAILING_LIST", payload: e });
-            }}
           />
           <Button
             sx={{ width: "250px", marginTop: "30px" }}

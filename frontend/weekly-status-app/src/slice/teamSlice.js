@@ -26,7 +26,6 @@ export const getTeamsForProject = createAsyncThunk(
 export const createNewTeam = createAsyncThunk(
   "createNewPTeam",
   async (body) => {
-    console.log(body, "body")
     const response = await createTeamsApi(body);
     return response.data;
   }

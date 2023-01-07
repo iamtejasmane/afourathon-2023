@@ -17,7 +17,7 @@ function ResponsiveAppBar() {
     <AppBar
       position="fixed"
       sx={{
-        color: theme.palette.primary.main,
+        color: theme.palette.primary.light,
         backgroundColor: theme.palette.primary.light,
         zIndex: "1400",
       }}
@@ -25,7 +25,6 @@ function ResponsiveAppBar() {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <WidgetsIcon sx={{ display: "flex", mr: 1 }} /> */}
           <img style={{width: "30px" , padding: "5px"}} src="./app.png" alt="logo">
           </img>
           <Link to="/">

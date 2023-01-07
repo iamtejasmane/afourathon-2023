@@ -6,16 +6,16 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box } from "@mui/system";
-import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 import { createNewProject, getAllProject } from "../../slice/projectSlice";
 import { useDispatch } from "react-redux";
 import { useUser } from "../../contexts";
 
 const options = [
-  { value: "admin@admin.com", label: "admin@admin.com", empId: 2 },
-  { value: "manager", label: "manager@admin.com", empId: "7" },
-  { value: "cto@admin.com", label: "CTO@admin.com", empId: "6" },
+  { value: "vijaytembugade21@gmail.com", label: "vijaytembugade21@gmail.com" },
+  { value: "tejasmane485@gmail.com", label: "tejasmane485@gmail.com" },
 ];
+
 
 const intialState = {
   project_name: "",
@@ -151,7 +151,7 @@ const AddProjectForm = ({ open, setOpen }) => {
               dispatch({ type: "SET_MANAGER_MAIL", payload: e.target.value })
             }
           />
-          <Select
+          <CreatableSelect
             style={{ minWidth: "25ch" }}
             placeholder="Daily Status Report Mailing List"
             options={options}

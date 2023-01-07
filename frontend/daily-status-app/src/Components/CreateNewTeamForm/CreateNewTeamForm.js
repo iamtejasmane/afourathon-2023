@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import { Button, FormControl, TextField } from "@mui/material";
@@ -7,16 +7,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box } from "@mui/system";
 import Select from "react-select";
-import { createNewProject, getAllProject } from "../../slice/projectSlice";
+
 import { useDispatch, useSelector } from "react-redux";
 import { createNewTeam, getTeamsForProject } from "../../slice/teamSlice";
 import { useUser } from "../../contexts";
-
-const options = [
-  { value: "admin@admin.com", label: "admin@admin.com", empId: "2" },
-  { value: "manager", label: "manager@admin.com", empId: "7" },
-  { value: "cto@admin.com", label: "CTO@admin.com", empId: "6" },
-];
+import { getExployeeListApi } from "../../apis/teams-api";
 
 const intialState = {
   team_name: "",
@@ -24,7 +19,7 @@ const intialState = {
   team_end_dt: Date.parse(new Date()),
   team_lead_name: "",
   team_lead_email: "",
-  team_members_emp_id_list: [4, 5],
+  team_members_emp_id_list: [],
 };
 
 const formReducer = (state, action) => {
@@ -60,12 +55,19 @@ const formReducer = (state, action) => {
       };
     }
     case "SET_MAILING_LIST": {
+      const requiredList = action.payload.map(item => item.emp_id)
       return {
         ...state,
-        team_members_emp_id_list: [18],
+        team_members_emp_id_list: [...requiredList],
       };
     }
 
+    case "SET_NEW_DATA": {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    }
     default: {
       return { ...state };
     }
@@ -76,10 +78,12 @@ const CreateNewTeamForm = ({ open, setOpen }) => {
   const reduxDispatch = useDispatch();
 
   const [state, dispatch] = useReducer(formReducer, intialState);
+  const [options, setOptions] = useState([]);
   const { selectedProjectForTeam } = useSelector((store) => store.teams);
   const { user } = useUser();
 
   const handleClick = async () => {
+    dispatch({ type: "SET_NEW_DATA", payload: intialState });
     await reduxDispatch(
       createNewTeam({
         ...state,
@@ -96,10 +100,34 @@ const CreateNewTeamForm = ({ open, setOpen }) => {
     setOpen(false);
   };
 
+  const getExployeeList = async () => {
+    const { data } = await getExployeeListApi({ empId: user.empId });
+    console.log(data);
+    if (data.length > 0) {
+      const newData = data
+        .filter((item) => item.team_id === null)
+        .map((item) => ({
+          label: item.email,
+          value: item.email,
+          ...item,
+        }));
+      setOptions(newData);
+    }
+  };
+
+  useEffect(() => {
+    if (user.empId) {
+      getExployeeList();
+    }
+  }, [user.empId]);
+
   return (
     <Dialog
       fullScreen={false}
-      onClose={() => setOpen(false)}
+      onClose={() => {
+        dispatch({ type: "SET_NEW_DATA", payload: intialState });
+        setOpen(false);
+      }}
       open={open}
       sx={{ zIndex: "1800", position: "absolute" }}
     >
