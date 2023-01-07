@@ -14,6 +14,7 @@ import {
   updateProject,
 } from "../../slice/projectSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useUser } from "../../contexts";
 
 const options = [
   { value: "admin@admin.com", label: "admin@admin.com", empId: "2" },
@@ -87,6 +88,8 @@ const UpdateProjectForm = () => {
     (store) => store.project
   );
 
+  const {user} = useUser();
+
   const [state, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {
@@ -102,8 +105,8 @@ const UpdateProjectForm = () => {
   };
   const handleClick = async () => {
     handleClose();
-    await reduxDispatch(updateProject({ ...state, empId: 2}));
-    await reduxDispatch(getAllProject({ empId: 2}));
+    await reduxDispatch(updateProject({ ...state, empId: user.empId}));
+    await reduxDispatch(getAllProject({ empId: user.empId}));
   };
 
   return (

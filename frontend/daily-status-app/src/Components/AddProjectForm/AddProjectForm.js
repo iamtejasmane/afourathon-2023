@@ -9,6 +9,7 @@ import { Box } from "@mui/system";
 import Select from "react-select";
 import { createNewProject, getAllProject } from "../../slice/projectSlice";
 import { useDispatch } from "react-redux";
+import { useUser } from "../../contexts";
 
 const options = [
   { value: "admin@admin.com", label: "admin@admin.com", empId: 2 },
@@ -74,11 +75,12 @@ const AddProjectForm = ({ open, setOpen }) => {
   const reduxDispatch = useDispatch();
 
   const [state, dispatch] = useReducer(formReducer, intialState);
+  const {user  } = useUser();
 
   const handleClick = async () => {
     setOpen(false);
-    await reduxDispatch(createNewProject({ ...state, empId: 2 }));
-    await reduxDispatch(getAllProject({ empId: 2 }));
+    await reduxDispatch(createNewProject({ ...state, empId: user.empId }));
+    await reduxDispatch(getAllProject({ empId: user.empId  }));
   };
 
   return (

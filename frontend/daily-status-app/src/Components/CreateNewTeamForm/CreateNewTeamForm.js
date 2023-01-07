@@ -10,6 +10,7 @@ import Select from "react-select";
 import { createNewProject, getAllProject } from "../../slice/projectSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { createNewTeam, getTeamsForProject } from "../../slice/teamSlice";
+import { useUser } from "../../contexts";
 
 const options = [
   { value: "admin@admin.com", label: "admin@admin.com", empId: "2" },
@@ -23,7 +24,7 @@ const intialState = {
   team_end_dt: Date.parse(new Date()),
   team_lead_name: "",
   team_lead_email: "",
-  team_members_emp_id_list: [4, 5]
+  team_members_emp_id_list: [4, 5],
 };
 
 const formReducer = (state, action) => {
@@ -61,7 +62,7 @@ const formReducer = (state, action) => {
     case "SET_MAILING_LIST": {
       return {
         ...state,
-        team_members_emp_id_list: [18]
+        team_members_emp_id_list: [18],
       };
     }
 
@@ -75,11 +76,23 @@ const CreateNewTeamForm = ({ open, setOpen }) => {
   const reduxDispatch = useDispatch();
 
   const [state, dispatch] = useReducer(formReducer, intialState);
-  const {selectedProjectForTeam} = useSelector(store=> store.teams) 
+  const { selectedProjectForTeam } = useSelector((store) => store.teams);
+  const { user } = useUser();
 
   const handleClick = async () => {
-    await reduxDispatch(createNewTeam({ ...state, empId: 2 , project_id: selectedProjectForTeam.project_id }));
-    await reduxDispatch(getTeamsForProject({ project_id: selectedProjectForTeam.project_id, empId: 2 }));
+    await reduxDispatch(
+      createNewTeam({
+        ...state,
+        empId: user.empId,
+        project_id: selectedProjectForTeam.project_id,
+      })
+    );
+    await reduxDispatch(
+      getTeamsForProject({
+        project_id: selectedProjectForTeam.project_id,
+        empId: user.empId,
+      })
+    );
     setOpen(false);
   };
 

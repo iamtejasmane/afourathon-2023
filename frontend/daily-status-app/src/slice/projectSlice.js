@@ -12,6 +12,7 @@ const initialState = {
   updateProjectModal: false,
   loading: false,
   error: null,
+  snackStatus: {value: null, error: null}
 };
 
 export const getAllProject = createAsyncThunk(
@@ -55,6 +56,9 @@ export const projectSlice = createSlice({
     closeUpdateProjectModal: (state, action) => {
       state.updateProjectModal = false;
     },
+    setSnackStatus : (state, action)=>{
+      state.snackStatus = {value: null, error: null}
+    }
   },
   extraReducers: (builder) => {
     //get projects
@@ -73,6 +77,7 @@ export const projectSlice = createSlice({
     //create project
     builder.addCase(createNewProject.fulfilled, (state, action) => {
       state.loading = false;
+      state.snackStatus = {value: "Project Created", error: false}
     });
     builder.addCase(createNewProject.pending, (state, action) => {
       state.loading = true;
@@ -80,11 +85,13 @@ export const projectSlice = createSlice({
     builder.addCase(createNewProject.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      state.snackStatus = {value: "Project Failed Create", error: true}
     });
 
     //delete project
     builder.addCase(deleteProject.fulfilled, (state, action) => {
       state.loading = false;
+      state.snackStatus = {value: "Project Deleted", error: false}
     });
     builder.addCase(deleteProject.pending, (state, action) => {
       state.loading = true;
@@ -92,11 +99,13 @@ export const projectSlice = createSlice({
     builder.addCase(deleteProject.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      state.snackStatus = {value: "Project Failed delete", error: true}
     });
 
     // //updateProject
     builder.addCase(updateProject.fulfilled, (state, action) => {
       state.loading = false;
+      state.snackStatus = {value: "Project Updated", error: false}
     });
     builder.addCase(updateProject.pending, (state, action) => {
       state.loading = true;
@@ -104,6 +113,7 @@ export const projectSlice = createSlice({
     builder.addCase(updateProject.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      state.snackStatus = {value: "Project failed to Update", error: true}
     });
   },
 });

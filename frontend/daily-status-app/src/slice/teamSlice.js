@@ -13,6 +13,7 @@ const initialState = {
   selectedTeam: {},
   loading: false,
   error: null,
+  snackStatus: {value: null, error: null},
 };
 
 export const getTeamsForProject = createAsyncThunk(
@@ -62,6 +63,9 @@ export const teamSlice = createSlice({
     setCloseTeamModal: (state) => {
       state.openTeamsModal = false;
     },
+    setSnackStatus : (state, action)=>{
+      state.snackStatus = {value: null, error: null}
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getTeamsForProject.fulfilled, (state, action) => {
@@ -78,6 +82,7 @@ export const teamSlice = createSlice({
 
     builder.addCase(createNewTeam.fulfilled, (state, action) => {
       state.loading = false;
+      state.snackStatus = {value: "Team Created!", error: false}
     });
     builder.addCase(createNewTeam.pending, (state, action) => {
       state.loading = true;
@@ -85,10 +90,12 @@ export const teamSlice = createSlice({
     builder.addCase(createNewTeam.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      state.snackStatus = {value: "Team Failed to Create!", error: true}
     });
 
     builder.addCase(updateTeam.fulfilled, (state, action) => {
       state.loading = false;
+      state.snackStatus = {value: "Team Updated!", error: false}
     });
     builder.addCase(updateTeam.pending, (state, action) => {
       state.loading = true;
@@ -96,17 +103,21 @@ export const teamSlice = createSlice({
     builder.addCase(updateTeam.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      state.snackStatus = {value: "Team Failed to Update!", error: true}
     });
 
     builder.addCase(deleteTeam.fulfilled, (state, action) => {
       state.loading = false;
+      state.snackStatus = {value: "Team Deleted!", error: false}
     });
     builder.addCase(deleteTeam.pending, (state, action) => {
       state.loading = true;
+      
     });
     builder.addCase(deleteTeam.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+      state.snackStatus = {value: "Team failed to delete!", error: true}
     });
   },
 });

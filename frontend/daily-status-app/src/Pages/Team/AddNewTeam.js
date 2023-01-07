@@ -7,6 +7,7 @@ import TeamList from "./TeamList";
 import { getTeamsForProject, teamsActions } from "../../slice/teamSlice";
 import isEmpty from "lodash";
 import CreateNewTeamForm from "../../Components/CreateNewTeamForm";
+import { useUser } from "../../contexts";
 
 const AddNewTeam = () => {
   const [option, setOptions] = useState([]);
@@ -14,6 +15,7 @@ const AddNewTeam = () => {
   const { selectedProjectForTeam } = useSelector((store) => store.teams);
   const { projectList } = useSelector((store) => store.project);
   const dispatch = useDispatch();
+  const { user } = useUser();
 
   useEffect(() => {
     const filteredProjectList =
@@ -33,8 +35,12 @@ const AddNewTeam = () => {
   }, [projectList]);
 
   function handleProjectSelectChange(value) {
-    dispatch(getTeamsForProject({ empId: 2, project_id: value?.project_id }));
-    dispatch(teamsActions.setselectedProjectForTeam(value));
+    if (value.project_id !== selectedProjectForTeam.project_id) {
+      dispatch(
+        getTeamsForProject({ empId: user.empId, project_id: value?.project_id })
+      );
+      dispatch(teamsActions.setselectedProjectForTeam(value));
+    }
   }
 
   const handleOpen = () => {
@@ -67,7 +73,7 @@ const AddNewTeam = () => {
           onChange={handleProjectSelectChange}
           defaultValue={{
             label: selectedProjectForTeam.project_name || "Select Project",
-            value: selectedProjectForTeam.project_id ,
+            value: selectedProjectForTeam.project_id,
           }}
         />
       </div>

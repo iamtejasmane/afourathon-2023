@@ -7,18 +7,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box } from "@mui/system";
 import Select from "react-select";
-import {
-  createNewProject,
-  getAllProject,
-  projectAction,
-  updateProject,
-} from "../../slice/projectSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getTeamsForProject,
   teamsActions,
   updateTeam,
 } from "../../slice/teamSlice";
+import { useUser } from "../../contexts";
 
 const options = [
   { value: "admin@admin.com", label: "admin@admin.com", empId: "2" },
@@ -91,6 +86,7 @@ const UpdateTeamForm = () => {
   const { selectedProjectForTeam, openTeamsModal, selectedTeam } = useSelector(
     (store) => store.teams
   );
+  const { user } = useUser();
 
   const [state, dispatch] = useReducer(formReducer, initialState);
 
@@ -116,7 +112,7 @@ const UpdateTeamForm = () => {
     await reduxDispatch(
       getTeamsForProject({
         project_id: selectedProjectForTeam.project_id,
-        empId: 2,
+        empId: user.empId,
       })
     );
     handleClose();

@@ -5,6 +5,7 @@ import Select from "react-select";
 import { Box } from "@mui/system";
 import { useDispatch } from "react-redux";
 import { createStatus, getStatusOfUser } from "../../slice/statusSlice";
+import { useUser } from "../../contexts";
 
 const customStyles = {
   control: (base) => ({
@@ -27,18 +28,19 @@ const initialStatusState = {
   hours_spent: "",
   status: "",
   comments: "",
-}
+};
 
 const AddStatus = () => {
-  const [statusData, setStatusData] = useState();
+  const [statusData, setStatusData] = useState({ ...initialStatusState });
+  const {user} = useUser();
 
   const dispatch = useDispatch();
   const handleSubmit = async () => {
     await dispatch(
-      createStatus({ ...statusData, status: statusData.status.value, empId: 2 })
+      createStatus({ ...statusData, status: statusData.status.value, empId: user.empId })
     );
-    await dispatch(getStatusOfUser({ empId: 2 }));
-    setStatusData({...initialStatusState})
+    await dispatch(getStatusOfUser({ empId: user.empId }));
+    setStatusData({ ...initialStatusState });
   };
   return (
     <div>

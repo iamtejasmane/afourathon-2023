@@ -1,5 +1,5 @@
 import { Box, IconButton, Paper, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteStatus,
@@ -8,18 +8,21 @@ import {
 } from "../../slice/statusSlice";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useUser } from "../../contexts";
 
 const StatusList = () => {
   const dispatch = useDispatch();
   const { statusList } = useSelector((store) => store.status);
+  const {user} = useUser();
 
   useEffect(() => {
-    dispatch(getStatusOfUser({ empId: 2 }));
-  }, []);
+    console.log("called", user)
+    dispatch(getStatusOfUser({ empId: user.empId}));
+  }, [user.empId]);
 
   const handleDelete = async (status_id) => {
     await dispatch(deleteStatus({ status_id }));
-    await dispatch(getStatusOfUser({ empId: 2 }));
+    await dispatch(getStatusOfUser({ empId: user.empId }));
   };
 
   const handleEdit = async (status) => {
@@ -86,4 +89,4 @@ const StatusList = () => {
   );
 };
 
-export default StatusList;
+export default React.memo(StatusList);

@@ -11,6 +11,7 @@ const initialState = {
   isOpenEditStatusModal: false,
   loading: false,
   error: null,
+  snackStatus :{value: null, error: null}
 };
 
 export const getStatusOfUser = createAsyncThunk(
@@ -57,6 +58,9 @@ export const statusSlice = createSlice({
         ...action.payload,
       };
     },
+    setSnackStatus : (state, action)=>{
+      state.snackStatus = {value: null, error: null}
+    }
   },
   extraReducers: (builder) => {
     //get user status
@@ -71,6 +75,28 @@ export const statusSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(createStatus.fulfilled, (state, action)=>{
+      state.snackStatus = {value: "Status Created!", error: false}
+    })
+    builder.addCase(createStatus.rejected, (state, action)=>{
+      state.snackStatus = {value: "Status Failed to Created!", error: false}
+    })
+
+
+    builder.addCase(updateStatus.fulfilled, (state, action)=>{
+      state.snackStatus = {value: "Status Updated!", error: false}
+    })
+    builder.addCase(updateStatus.rejected, (state, action)=>{
+      state.snackStatus = {value: "Status Failed to Updated!", error: false}
+    })
+
+    builder.addCase(deleteStatus.fulfilled, (state, action)=>{
+      state.snackStatus = {value: "Status deleted!", error: false}
+    })
+    builder.addCase(deleteStatus.rejected, (state, action)=>{
+      state.snackStatus = {value: "Status Failed to delete!", error: false}
+    })
 
   },
 });

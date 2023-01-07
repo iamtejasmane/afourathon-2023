@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
+import { useUser } from "../../contexts";
 import {
   statusAction,
   updateStatus,
@@ -29,18 +30,19 @@ const EditStatusModal = () => {
   const { selectedStatusToEdit, isOpenEditStatusModal } = useSelector(
     (store) => store.status
   );
+  const {user} = useUser();
 
   const handleClose = async () => {
     dispatch(statusAction.unSetStatusEditModal());
     dispatch(statusAction.unSetStatusForEdit());
-    await dispatch(getStatusOfUser({ empId: 2 }));
+    await dispatch(getStatusOfUser({ empId: user.empId }));
   };
 
   const handleSubmit = async () => {
     dispatch(statusAction.unSetStatusEditModal());
     dispatch(statusAction.unSetStatusForEdit());
     await dispatch(updateStatus({ ...selectedStatusToEdit }));
-    await dispatch(getStatusOfUser({ empId: 2 }));
+    await dispatch(getStatusOfUser({ empId: user.empId }));
   };
   return (
     <Dialog
@@ -107,4 +109,4 @@ const EditStatusModal = () => {
   );
 };
 
-export default EditStatusModal;
+export default React.memo(EditStatusModal);

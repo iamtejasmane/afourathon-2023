@@ -16,6 +16,7 @@ import {
   getTeamsForProject,
 } from "../../slice/teamSlice";
 import { isEmpty } from "lodash";
+import { useUser } from "../../contexts";
 
 const TeamList = () => {
   const [rows, setRows] = useState([]);
@@ -23,6 +24,7 @@ const TeamList = () => {
     (store) => store.teams
   );
   const dispatch = useDispatch();
+  const {user} = useUser();
 
   function handleEdit(row) {
     dispatch(teamsActions.setOpenTeamModal());
@@ -32,7 +34,7 @@ const TeamList = () => {
     await dispatch(deleteTeam({ teamId: team_id }));
     await dispatch(
       getTeamsForProject({
-        empId: 2,
+        empId: user.empId,
         project_id: selectedProjectForTeam.project_id,
       })
     );

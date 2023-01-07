@@ -38,4 +38,4 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+export default React.memo(ResponsiveAppBar);

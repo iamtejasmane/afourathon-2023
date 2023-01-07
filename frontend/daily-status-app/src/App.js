@@ -10,6 +10,7 @@ import { useEffect } from "react";
 
 import { getAllProject } from "./slice/projectSlice";
 import { useDispatch } from "react-redux";
+import { useUser } from "./contexts";
 
 const router = createBrowserRouter([
   {
@@ -43,15 +44,15 @@ function Main() {
   }, []);
   return (
     <>
-    <Navbar />
-    <Grid2 container>
-      <Grid2 xs={2}>
-        <Sidebar />
+      <Navbar />
+      <Grid2 container>
+        <Grid2 xs={2}>
+          <Sidebar />
+        </Grid2>
+        <Grid2 xs={10} sx={{ marginTop: "75px" }}>
+          <Outlet />
+        </Grid2>
       </Grid2>
-      <Grid2 xs={10} sx={{ marginTop: "75px" }}>
-        <Outlet />
-      </Grid2>
-    </Grid2>
     </>
   );
 }
