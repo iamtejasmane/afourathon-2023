@@ -2,7 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const morgan = require("morgan")
 
-const routerProject = require("./routes/project")
+const routerDomain = require("./routes/domain")
 
 const app = express()
 
@@ -10,8 +10,7 @@ app.use(express.json())
 app.use(cors("*"))
 app.use(morgan("combined"))
 
-app.use(routerProject)
-app.use(routerDailyStatusEmails)
+app.use(routerDomain)
 
 // this is a simple health monitoring api
 app.get("/health-check", (req, res) => {
