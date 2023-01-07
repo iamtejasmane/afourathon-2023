@@ -1,22 +1,12 @@
 const express = require("express")
 const utils = require("../utils/utils")
 
-const { Employees } = require("../../../db-server/db/db-mysql")
+const { Employees } = require("../db/db-mysql")
 const router = express.Router()
-
-// get all the employees
-// router.get("/admin/:id", async (req, res) => {
-//   Employees.findAll()
-//     .then((employees) => {
-//       res.send(utils.createResult(null, employees))
-//     })
-//     .catch((err) => {
-//       res.send(utils.createResult(err, null))
-//     })
-// })
 
 // this is the middleware to check whether
 // the user has admin permission or not.
+
 // get all employees information
 // id : admin's id
 router.get("/admin/:id", (req, res) => {
@@ -97,5 +87,16 @@ router.delete("/admin/:id", (req, res) => {
       res.send(utils.createResult(error, null))
     })
 })
+
+// get all the employees
+// router.get("/admin/:id", async (req, res) => {
+//   Employees.findAll()
+//     .then((employees) => {
+//       res.send(utils.createResult(null, employees))
+//     })
+//     .catch((err) => {
+//       res.send(utils.createResult(err, null))
+//     })
+// })
 
 module.exports = router
