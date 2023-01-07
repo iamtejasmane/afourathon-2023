@@ -21,7 +21,8 @@ const ProjectList = () => {
     await dispatch(getAllProject({ empId: 2 }));
   }
   const columns = [
-    { field: "project_id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 90 },
+    { field: "project_id", headerName: "Project Id", width: 90 },
     {
       field: "project_name",
       headerName: "Project Name",
@@ -84,8 +85,8 @@ const ProjectList = () => {
   ];
 
   useEffect(() => {
-    const newRows = projectList.map((value) => ({
-      id: value.project_id,
+    const newRows = projectList.map((value, index) => ({
+      id: index+1,
       ...value,
     }));
     setRows(newRows);

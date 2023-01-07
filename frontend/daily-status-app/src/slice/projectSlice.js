@@ -10,6 +10,8 @@ const initialState = {
   projectList: [],
   selectedProject: {},
   updateProjectModal: false,
+  loading: false,
+  error: null,
 };
 
 export const getAllProject = createAsyncThunk(
@@ -44,19 +46,64 @@ export const projectSlice = createSlice({
     setProject: (state, action) => {
       state.selectedProject = action.payload;
     },
-    unsetProject: (state)=>{
+    unsetProject: (state) => {
       state.selectedProject = [];
     },
-    openUpdateProjectModal: (state, action)=>{
-      state.updateProjectModal = true ;
+    openUpdateProjectModal: (state, action) => {
+      state.updateProjectModal = true;
     },
-    closeUpdateProjectModal: (state, action)=>{
-      state.updateProjectModal = false ;
-    }
+    closeUpdateProjectModal: (state, action) => {
+      state.updateProjectModal = false;
+    },
   },
   extraReducers: (builder) => {
+    //get projects
     builder.addCase(getAllProject.fulfilled, (state, action) => {
       state.projectList = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getAllProject.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getAllProject.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    //create project
+    builder.addCase(createNewProject.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(createNewProject.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(createNewProject.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    //delete project
+    builder.addCase(deleteProject.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(deleteProject.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteProject.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    // //updateProject
+    builder.addCase(updateProject.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(updateProject.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(updateProject.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     });
   },
 });

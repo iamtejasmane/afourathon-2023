@@ -42,6 +42,8 @@ function Main() {
     dispatch(getAllProject({ empId: 2 }));
   }, []);
   return (
+    <>
+    <Navbar />
     <Grid2 container>
       <Grid2 xs={2}>
         <Sidebar />
@@ -50,13 +52,13 @@ function Main() {
         <Outlet />
       </Grid2>
     </Grid2>
+    </>
   );
 }
 
 function App() {
   return (
     <>
-      <Navbar />
       <RouterProvider router={router} />
     </>
   );

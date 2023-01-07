@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Select from "react-select";
 import { Box } from "@mui/system";
+import { useDispatch } from "react-redux";
+import { createStatus, getStatusOfUser } from "../../slice/statusSlice";
 
 const customStyles = {
   control: (base) => ({
@@ -20,8 +22,24 @@ const options = [
   { value: "In Review", label: "In Review" },
 ];
 
+const initialStatusState = {
+  ticket_id: "",
+  hours_spent: "",
+  status: "",
+  comments: "",
+}
+
 const AddStatus = () => {
-  const handleOpen = () => {};
+  const [statusData, setStatusData] = useState();
+
+  const dispatch = useDispatch();
+  const handleSubmit = async () => {
+    await dispatch(
+      createStatus({ ...statusData, status: statusData.status.value, empId: 2 })
+    );
+    await dispatch(getStatusOfUser({ empId: 2 }));
+    setStatusData({...initialStatusState})
+  };
   return (
     <div>
       <Grid container sx={{ padding: "20px 50px 10px" }}>
@@ -42,33 +60,42 @@ const AddStatus = () => {
           style={{ width: "200px" }}
           label="Ticket Id"
           type="Text"
-          // value={state.team_name}
-          // onChange={}
+          value={statusData.ticket_id}
+          onChange={(e) =>
+            setStatusData((prev) => ({ ...prev, ticket_id: e.target.value }))
+          }
         />
         <TextField
           style={{ width: "200px" }}
           label="Hours Spent"
           type="Number"
-          // value={state.team_name}
-          // onChange={}
+          value={statusData.hours_spent}
+          onChange={(e) =>
+            setStatusData((prev) => ({ ...prev, hours_spent: e.target.value }))
+          }
         />
         <div style={{ width: "250px" }}>
           <Select
             styles={customStyles}
             options={options}
             placeholder="Status... "
+            onChange={(value) =>
+              setStatusData((prev) => ({ ...prev, status: value }))
+            }
           />
         </div>
 
         <TextField
           style={{ width: "400px" }}
           label="Comment"
-          // value={state.team_name}
-          // onChange={}
+          value={statusData.comments}
+          onChange={(e) =>
+            setStatusData((prev) => ({ ...prev, comments: e.target.value }))
+          }
         />
         <div>
           <Button
-            onClick={handleOpen}
+            onClick={handleSubmit}
             size="large"
             sx={{ height: "52px" }}
             variant="contained"

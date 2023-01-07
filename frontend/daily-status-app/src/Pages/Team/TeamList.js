@@ -1,28 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Grid, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Grid,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProject } from "../../slice/projectSlice";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { teamsActions , deleteTeam, getTeamsForProject} from "../../slice/teamSlice";
+import {
+  teamsActions,
+  deleteTeam,
+  getTeamsForProject,
+} from "../../slice/teamSlice";
 import { isEmpty } from "lodash";
 
 const TeamList = () => {
   const [rows, setRows] = useState([]);
-  const { teamsList, selectedProjectForTeam } = useSelector((store) => store.teams);
+  const { teamsList, selectedProjectForTeam, loading } = useSelector(
+    (store) => store.teams
+  );
   const dispatch = useDispatch();
 
   function handleEdit(row) {
-    dispatch(teamsActions.setOpenTeamModal())
-    dispatch(teamsActions.setTeam(row))
+    dispatch(teamsActions.setOpenTeamModal());
+    dispatch(teamsActions.setTeam(row));
   }
   async function handleDelete(team_id) {
-    await dispatch(deleteTeam({ teamId: team_id   }));
-    await dispatch(getTeamsForProject({ empId: 2 , project_id: selectedProjectForTeam.project_id}));
+    await dispatch(deleteTeam({ teamId: team_id }));
+    await dispatch(
+      getTeamsForProject({
+        empId: 2,
+        project_id: selectedProjectForTeam.project_id,
+      })
+    );
   }
   const columns = [
-    { field: "team_id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 90 },
+    { field: "team_id", headerName: "team_id", width: 90 },
     { field: "project_id", headerName: "Project ID", width: 90 },
     {
       field: "team_name",
@@ -70,7 +87,7 @@ const TeamList = () => {
             sx={{ paddingTop: "20px" }}
           >
             <Grid>
-              <IconButton onClick={()=>handleEdit(row)}>
+              <IconButton onClick={() => handleEdit(row)}>
                 <EditIcon color={"primary"} />
               </IconButton>
             </Grid>
@@ -86,28 +103,33 @@ const TeamList = () => {
   ];
 
   useEffect(() => {
-    const newRows = teamsList.map((value) => ({
-      id: value.team_id,
+    const newRows = teamsList.map((value, index) => ({
+      id: index + 1,
       ...value,
     }));
     setRows(newRows);
 
-    return ()=> setRows([]);
+    return () => setRows([]);
   }, [teamsList]);
-
 
   return (
     <div>
-      <Box sx={{ height: "50vh", maxWidth: "80%", padding: "50px" }}>
-        {!isEmpty(selectedProjectForTeam) && <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[5]}
-          disableSelectionOnClick
-          experimentalFeatures={{ newEditingApi: true }}
-        />}
-      </Box>
+      {loading === false ? (
+        <Box sx={{ height: "50vh", maxWidth: "80%", padding: "50px" }}>
+          {!isEmpty(selectedProjectForTeam) && (
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[5]}
+              disableSelectionOnClick
+              experimentalFeatures={{ newEditingApi: true }}
+            />
+          )}
+        </Box>
+      ) : (
+        <CircularProgress />
+      )}
     </div>
   );
 };

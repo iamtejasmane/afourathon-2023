@@ -90,6 +90,7 @@ const UpdateProjectForm = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {
+    console.log("rendered")
     dispatch({ type: "SET_NEW_STATE", payload: { ...selectedProject } });
     return () =>
       dispatch({ type: "SET_NEW_STATE", payload: { ...initialState } });
@@ -100,9 +101,9 @@ const UpdateProjectForm = () => {
     reduxDispatch(projectAction.unsetProject());
   };
   const handleClick = async () => {
+    handleClose();
     await reduxDispatch(updateProject({ ...state, empId: 2}));
     await reduxDispatch(getAllProject({ empId: 2}));
-    handleClose();
   };
 
   return (

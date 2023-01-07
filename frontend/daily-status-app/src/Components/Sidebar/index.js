@@ -13,36 +13,45 @@ import { NavLink } from "react-router-dom";
 import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
 import GroupIcon from "@mui/icons-material/Group";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import {startCase} from 'lodash';
+import { startCase } from "lodash";
+import { useLocation } from "react-router-dom";
 
-
-const drawer = (
-  <div>
-    <Toolbar />
-    <Divider />
-    <List >
-      {["project", "teams", "status"].map((text, index) => (
-        <ListItem key={text} sx={{ paddingLeft: "25px" }} >
-          <NavLink to={`${text}`}>
-            <ListItemButton>
-              <ListItemIcon>
-                {index === 0 ? (
-                  <AssuredWorkloadIcon />
-                ) : index === 1 ? (
-                  <GroupIcon />
-                ) : (
-                  <TaskAltIcon />
-                )}
-              </ListItemIcon>
-              <ListItemText primary={startCase(text)} />
-            </ListItemButton>
-          </NavLink>
-        </ListItem>
-      ))}
-    </List>
-  </div>
-);
+const DrawerMain = ({ pathname }) => {
+  return (
+    <div>
+      <Toolbar />
+      <Divider />
+      <List>
+        {["project", "teams", "status"].map((text, index) => (
+          <ListItem
+            key={text}
+            sx={{
+              paddingLeft: "25px",
+              color: pathname.includes(text) ? "#0277bd" : "",
+            }}
+          >
+            <NavLink to={`${text}`}>
+              <ListItemButton>
+                <ListItemIcon sx={{color: pathname.includes(text) ? "#0277bd" : "",}}>
+                  {index === 0 ? (
+                    <AssuredWorkloadIcon />
+                  ) : index === 1 ? (
+                    <GroupIcon />
+                  ) : (
+                    <TaskAltIcon />
+                  )}
+                </ListItemIcon>
+                <ListItemText primary={startCase(text)} />
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
+};
 const Sidebar = () => {
+  let { pathname } = useLocation();
   return (
     <div>
       <Drawer
@@ -53,7 +62,7 @@ const Sidebar = () => {
         }}
         open
       >
-        {drawer}
+        <DrawerMain pathname={pathname} />
       </Drawer>
     </div>
   );

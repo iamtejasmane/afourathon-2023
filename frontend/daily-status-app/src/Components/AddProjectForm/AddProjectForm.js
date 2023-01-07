@@ -76,9 +76,9 @@ const AddProjectForm = ({ open, setOpen }) => {
   const [state, dispatch] = useReducer(formReducer, intialState);
 
   const handleClick = async () => {
+    setOpen(false);
     await reduxDispatch(createNewProject({ ...state, empId: 2 }));
     await reduxDispatch(getAllProject({ empId: 2 }));
-    setOpen(false);
   };
 
   return (

@@ -1,14 +1,17 @@
-import React from 'react'
-import UpdateTeamForm from '../../Components/UpdateTeamForm';
-import AddNewTeam from './AddNewTeam';
+import { CircularProgress } from "@mui/material";
+import React from "react";
+import { useSelector } from "react-redux";
+import UpdateTeamForm from "../../Components/UpdateTeamForm";
+import AddNewTeam from "./AddNewTeam";
 
 const Team = () => {
+  const { loading, error } = useSelector((store) => store.teams);
   return (
     <div>
-      <AddNewTeam/>
-      <UpdateTeamForm/>
+      <AddNewTeam />
+      <UpdateTeamForm />
     </div>
-  )
-}
+  );
+};
 
 export default Team;
