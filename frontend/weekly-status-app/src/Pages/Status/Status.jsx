@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 import EditStatusForm from "../../Components/EditStatusForm";
 import SnackBar from "../../Components/SnackBar";
 import AddStatus from "./AddStatus";
-import ProjectSelector from "./ProjectSelector";
+import ProjectSelector from "../../Components/ProjectSelector/ProjectSelector";
 import StatusList from "./StatusList";
 import AddNewStatusFrom from '../../Components/AddNewStatusForm'
+import MailerPopup from "../../Components/MailerPopup/MailerPopup";
 
 const Status = () => {
   const { snackStatus} = useSelector((store) => store.status);
@@ -16,6 +17,7 @@ const Status = () => {
       <AddStatus />
       <StatusList />
       <AddNewStatusFrom/>
+      <MailerPopup/>
     </div>
   );
 };

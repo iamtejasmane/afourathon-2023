@@ -11,7 +11,7 @@ import {
   statusSlice,
 } from "../../slice/statusSlice";
 import { useUser } from "../../contexts";
-import ProjectSelector from "./ProjectSelector";
+import ProjectSelector from "../../Components/ProjectSelector/ProjectSelector";
 
 const customStyles = {
   control: (base) => ({

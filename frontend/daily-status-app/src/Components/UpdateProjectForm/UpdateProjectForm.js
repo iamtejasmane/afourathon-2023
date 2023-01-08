@@ -177,15 +177,6 @@ const UpdateProjectForm = () => {
               dispatch({ type: "SET_MANAGER_MAIL", payload: e.target.value })
             }
           />
-          <Select
-            style={{ minWidth: "25ch" }}
-            placeholder="Create  Report Mailing List"
-            options={options}
-            isMulti={true}
-            onChange={(e) => {
-              dispatch({ type: "SET_MAILING_LIST", payload: e });
-            }}
-          />
           <Button
             sx={{ width: "250px", marginTop: "30px" }}
             size="large"

@@ -162,7 +162,7 @@ const AddProjectForm = ({ open, setOpen }) => {
           />
           <CreatableSelect
             style={{ minWidth: "25ch" }}
-            placeholder="Create Daily Status Report Mailing List"
+            placeholder="Create Weekly Status Report Mailing List"
             options={options}
             isMulti={true}
             onChange={(e) => {

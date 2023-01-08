@@ -105,7 +105,6 @@ const CreateNewTeamForm = ({ open, setOpen }) => {
     console.log(data);
     if (data.length > 0) {
       const newData = data
-        .filter((item) => item.team_id === null)
         .map((item) => ({
           label: item.email,
           value: item.email,

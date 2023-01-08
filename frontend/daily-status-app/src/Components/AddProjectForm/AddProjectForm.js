@@ -16,7 +16,6 @@ const options = [
   { value: "tejasmane485@gmail.com", label: "tejasmane485@gmail.com" },
 ];
 
-
 const intialState = {
   project_name: "",
   project_start_dt: Date.parse(new Date()),
@@ -64,6 +63,12 @@ const formReducer = (state, action) => {
         project_mailing_list: action.payload.map((item) => item.value),
       };
     }
+    case "SET_NEW_DATA": {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    }
 
     default: {
       return { ...state };
@@ -75,12 +80,13 @@ const AddProjectForm = ({ open, setOpen }) => {
   const reduxDispatch = useDispatch();
 
   const [state, dispatch] = useReducer(formReducer, intialState);
-  const {user  } = useUser();
+  const { user } = useUser();
 
   const handleClick = async () => {
     setOpen(false);
     await reduxDispatch(createNewProject({ ...state, empId: user.empId }));
-    await reduxDispatch(getAllProject({ empId: user.empId  }));
+    await reduxDispatch(getAllProject({ empId: user.empId }));
+    dispatch({ type: "SET_NEW_DATA", payload: intialState });
   };
 
   return (
