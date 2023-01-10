@@ -3,32 +3,37 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { store } from "./store";
+import { Provider } from "react-redux";
+import { UserContextProvoder } from "./contexts/userContext";
 
 const theme = createTheme({
   palette: {
     type: "light",
     primary: {
-      main: "#146073",
+      main: "#0277bd",
+      light: "#e8f1fa",
     },
     secondary: {
-      main: "#EF7B45",
+      main: "#f19d33",
+      dark: "#f18b05",
+      light: "#dcb685",
     },
   },
 });
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
+    <Provider store={store}>
+      <UserContextProvoder>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </UserContextProvoder>
+    </Provider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
