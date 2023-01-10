@@ -14,6 +14,11 @@ app.use(morgan("combined"))
 app.use(routerEmployee)
 app.use(routerAdmin)
 
+// this is a simple health monitoring api
+app.get("/health-check", (req, res) => {
+  res.send("OK")
+})
+
 // backlog: pass port as env variable
 app.listen(8004, () => {
   console.log("employee server listening on port:".green + "8004".blue)

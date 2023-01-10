@@ -30,7 +30,7 @@ router.get("/teams/:id", async (req, res) => {
         res.send(utils.createResult(err, null))
       })
   } else {
-    res.status(404).json({
+    res.status(401).json({
       status: "error",
       message: "Permission denied!",
     })
@@ -101,7 +101,7 @@ router.post("/teams/:id", async (req, res) => {
         res.send(utils.createResult(err, null))
       })
   } else {
-    res.status(404).json({
+    res.status(401).json({
       status: "error",
       message: "Permission denied!",
     })
