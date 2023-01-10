@@ -12,6 +12,11 @@ app.use(morgan("combined"))
 
 app.use(routerTeams)
 
+// this is a simple health monitoring api
+app.get("/health-check", (req, res) => {
+  res.send("OK")
+})
+
 app.listen(8012, () => {
   console.log("teams server is listening on port: ".green + "8012".blue)
 })

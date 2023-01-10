@@ -138,6 +138,11 @@ cron.schedule("* * * * *", async function () {
   }
 })
 
+// this is a simple health monitoring api
+app.get("/health-check", (req, res) => {
+  res.send("OK")
+})
+
 app.listen(8080, () => {
   console.log(
     "daily status email server listening on port: ".green + "8080".blue
