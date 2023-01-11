@@ -11,7 +11,7 @@ const Project = () => {
 
   return (
     <div>
-      <SnackBar value={snackStatus.value} error={snackStatus.value} />
+      <SnackBar value={snackStatus.value} error={snackStatus.error} />
       <AddNewProject />
       {loading === false ? <ProjectList /> : <CircularProgress />}
       <UpdateProjectForm />

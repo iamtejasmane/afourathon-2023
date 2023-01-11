@@ -1,18 +1,29 @@
 import { Button, Dialog } from "@mui/material";
+import { useSelector } from "react-redux";
+import { sendProjectWeeklyMails } from "../../apis/email-api";
 import ProjectSelector from "../ProjectSelector/ProjectSelector";
+
+const sendMails = async (body) => {
+  console.log(body);
+  await sendProjectWeeklyMails(body);
+};
 
 const MailerPoppModal = (props) => {
   const { open, setOpen } = props;
+  const { selectedProjectForStatusUpdate } = useSelector(
+    (store) => store.status
+  );
   function handleClose() {
-    setOpen({ value: false });
+    setOpen(false);
   }
 
-  function handleClick() {
-    setOpen({ value: false });
+   function handleClick() {
+    sendMails({ project_id: selectedProjectForStatusUpdate.project_id });
+    setOpen(false);
   }
   return (
     <div>
-      <Dialog sx={{ zIndex: "1800" }} open={open.value} onClose={handleClose}>
+      <Dialog sx={{ zIndex: "1800" }} open={open} onClose={handleClose}>
         <div
           style={{
             margin: "20px",

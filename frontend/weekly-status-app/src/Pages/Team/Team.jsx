@@ -9,7 +9,7 @@ const Team = () => {
   const { snackStatus } = useSelector((store) => store.teams);
   return (
     <div>
-      <SnackBar value={snackStatus.value} error={snackStatus.value} />
+      <SnackBar value={snackStatus.value} error={snackStatus.error} />
       <AddNewTeam />
       <UpdateTeamForm />
     </div>

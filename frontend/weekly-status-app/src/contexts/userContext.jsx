@@ -3,7 +3,7 @@ import { getLocalstorage, setLocalStorage } from "../helpers";
 
 const userContext = createContext();
 
-setLocalStorage("user", { empId: 2 });
+setLocalStorage("user", { empId: 2});
 
 const UserContextProvoder = ({ children }) => {
   const [user, setUser] = useState({ empId: null });

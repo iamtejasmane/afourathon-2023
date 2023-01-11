@@ -14,6 +14,7 @@ import {
   updateStatus,
 } from "../../slice/statusSlice";
 import { isEmpty } from "lodash";
+import MailerPopup from "../MailerPopup/MailerPopup";
 const initialState = {
   highligth: "",
   date: Date.parse(new Date()),
@@ -196,6 +197,7 @@ const AddNewStatusForm = ({ isForUpdate }) => {
           </FormControl>
         </Box>
       </Dialog>
+      <MailerPopup/>
     </div>
   );
 };
