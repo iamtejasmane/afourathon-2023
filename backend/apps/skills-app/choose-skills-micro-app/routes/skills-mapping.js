@@ -7,6 +7,16 @@ const router = express.Router()
 
 // get skill of an employee
 // id: employee id
+router.get("/skill-mappings", async (req, res, next) => {
+  SkillsMappings.findAll()
+    .then((skills) => {
+      res.send(utils.createResult(null, skills))
+    })
+    .catch((err) => {
+      res.send(utils.createResult(err, null))
+    })
+})
+
 router.get("/skill-mappings/:id", async (req, res, next) => {
   const emp_id = req.params.id
 

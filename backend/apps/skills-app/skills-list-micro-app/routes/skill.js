@@ -5,6 +5,18 @@ const { Employees, Skills } = require("../db/db-mysql")
 
 const router = express.Router()
 
+// get all skills
+// id: domain id
+router.get("/skills", async (req, res, next) => {
+  Skills.findAll()
+    .then((skills) => {
+      res.send(utils.createResult(null, skills))
+    })
+    .catch((err) => {
+      res.send(utils.createResult(err, null))
+    })
+})
+
 // get all skills by domain
 // id: domain id
 router.get("/skills/:id", async (req, res, next) => {

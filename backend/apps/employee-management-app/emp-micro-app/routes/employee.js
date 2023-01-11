@@ -4,6 +4,30 @@ const utils = require("../utils/utils")
 const { Employees } = require("../db/db-mysql")
 const router = express.Router()
 
+// get employee list
+router.get("/employees", (req, res) => {
+  Employees.findAll()
+    .then((employee) => {
+      res.send(utils.createResult(null, employee))
+    })
+    .catch((err) => {
+      res.send(utils.createResult(err, null))
+    })
+})
+
+// get employee details api
+router.get("/employees/:id", (req, res) => {
+  const emp_id = req.params.id
+
+  Employees.findAll({ where: { emp_id: emp_id } })
+    .then((employee) => {
+      res.send(utils.createResult(null, employee))
+    })
+    .catch((err) => {
+      res.send(utils.createResult(err, null))
+    })
+})
+
 // get employee details api
 router.get("/employees/:id", (req, res) => {
   const emp_id = req.params.id
