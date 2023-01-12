@@ -58,7 +58,9 @@ sequelize
   .authenticate()
   .then(() => {
     console.log("Connection established successfully".green)
-    console.log(HOST.green + ":".green + PORT.green)
+    console.log(
+      "Database is running on ".green + HOST.blue + ":".blue + PORT.blue
+    )
   })
   .catch((error) => {
     console.log("error " + error)

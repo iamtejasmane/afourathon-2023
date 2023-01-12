@@ -1,11 +1,17 @@
 const express = require("express")
 const utils = require("../utils/utils")
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
+const secret = process.env.SECRET
 
 const { Employees } = require("../db/db-mysql")
 const router = express.Router()
 
 // get employee list
 router.get("/employees", (req, res) => {
+  // TODO: token authentication
+  // if NOT send response unauthorised access
+  // else continue
   Employees.findAll()
     .then((employee) => {
       res.send(utils.createResult(null, employee))
@@ -55,7 +61,7 @@ router.get("/employee-team/:id", (req, res) => {
     })
 })
 // add new employee details api
-router.post("/employees", (req, res) => {
+router.post("/employee/signup", (req, res) => {
   const { first_name, last_name, gender, email, password, mobile, is_admin } =
     req.body
 
@@ -70,6 +76,33 @@ router.post("/employees", (req, res) => {
   })
     .then((employees) => {
       res.send(utils.createResult(null, employees))
+    })
+    .catch((err) => {
+      res.send(utils.createResult(err, null))
+    })
+})
+
+// employee login api
+router.post("/employee/signin", (req, res) => {
+  const { email, password } = req.body
+
+  Employees.findOne({
+    where: {
+      email: email,
+      password: password,
+    },
+  })
+    .then((employee) => {
+      let result = {}
+      const payload = { emp_id: employee.emp_id }
+      const token = jwt.sign(payload, secret)
+
+      result["data"] = {
+        emp_id: employee.emp_id,
+        token,
+      }
+
+      res.send(utils.createResult(null, result))
     })
     .catch((err) => {
       res.send(utils.createResult(err, null))
