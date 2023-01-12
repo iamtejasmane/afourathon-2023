@@ -6,6 +6,7 @@ import { statusAction } from "../../slice/statusSlice";
 import { teamsActions } from "../../slice/teamSlice";
 
 const Snackbaar = ({ value, error }) => {
+  console.log(value, error)
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -40,7 +41,6 @@ const Snackbaar = ({ value, error }) => {
         <Alert
          sx={{ width: '250px' }}
           severity={error === true ? "error" : "success"}
-          color={error === true ? "error" : "success"}
         >
           {value}
         </Alert>

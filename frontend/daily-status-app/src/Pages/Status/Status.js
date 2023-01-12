@@ -10,7 +10,7 @@ const Status = () => {
   const { snackStatus} = useSelector((store) => store.status);
   return (
     <div>
-      <SnackBar value={snackStatus.value} error={snackStatus.value} />
+      <SnackBar value={snackStatus.value} error={snackStatus.error} />
       <AddStatus />
       <StatusList />
       <EditStatusForm />

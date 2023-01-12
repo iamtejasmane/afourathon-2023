@@ -56,7 +56,7 @@ const StatusList = () => {
                     {listItem.highligth}
                   </Typography>{" "}
                 </Typography>
-                <Typography>Hours Spent : {listItem.risk}</Typography>
+                <Typography>Risk: {listItem.risk}</Typography>
                 <Typography>Week Ending Date: {listItem.date.slice(0,10)}</Typography>
               </Box>
               <Box
