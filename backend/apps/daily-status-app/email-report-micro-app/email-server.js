@@ -49,8 +49,8 @@ cron.schedule("* * * * *", async function () {
     for (k = 0; k < dailyStatusEmailsList.length; k++) {
       emailList.push(dailyStatusEmailsList[k].email)
     }
-    console.log("Email list".yellow)
-    console.log(emailList)
+    // console.log("Email list".yellow)
+    // console.log(emailList)
     for (j = 0; j < emps.length; j++) {
       // create a object of  employee id, email address and team id
       // to get the status
@@ -58,9 +58,9 @@ cron.schedule("* * * * *", async function () {
       const empStatus = await DailyStatus.findAll({
         where: { emp_id: emps[j].emp_id },
       })
-      console.log("emp status".red)
+      // console.log("emp status".red)
       const lastUpdatedStatus = empStatus[empStatus.length - 1]
-      console.log(lastUpdatedStatus)
+      // console.log(lastUpdatedStatus)
 
       let emp_details = {}
 
